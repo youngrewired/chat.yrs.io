@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "description": "my first socket.io app",
   "dependencies": {
+    "badwords-list": "^1.0.0",
     "express": "4.10.2",
     "sanitize-html": "^1.7.2",
     "socket.io": "1.2.0"

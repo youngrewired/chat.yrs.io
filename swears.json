@@ -1,0 +1,237 @@
+[
+{
+swear: "arse",
+censoredSwear: "ar**",
+offensive: "false"
+},
+{
+swear: "asshat",
+censoredSwear: "a**h**",
+offensive: "false"
+},
+{
+swear: "arsehole",
+censoredSwear: "ar**h**e",
+offensive: "false"
+},
+{
+swear: "assfuck",
+censoredSwear: "a**fu**",
+offensive: "true"
+},
+{
+swear: "bastard",
+censoredSwear: "ba**t**d",
+offensive: "false"
+},
+{
+swear: "bitch",
+censoredSwear: "bi**h",
+offensive: "false"
+},
+{
+swear: "bitchnapkins",
+censoredSwear: "bi**hnap*ins",
+offensive: "false"
+},
+{
+swear: "bitchslap",
+censoredSwear: "b****s**p",
+offensive: "false"
+},
+{
+swear: "bollocks",
+censoredSwear: "b***oc*s",
+offensive: "false"
+},
+{
+swear: "bullshit",
+censoredSwear: "bu**sh**",
+offensive: "false"
+},
+{
+swear: "chink",
+censoredSwear: "ch**k",
+offensive: "true"
+},
+{
+swear: "cock-up",
+censoredSwear: "co**-u*",
+offensive: "false"
+},
+{
+swear: "cockasaurus",
+censoredSwear: "co*k**au**s",
+offensive: "true"
+},
+{
+swear: "cocksocket",
+censoredSwear: "co*k*so**et",
+offensive: "true"
+},
+{
+swear: "coon",
+censoredSwear: "co**",
+offensive: "true"
+},
+{
+swear: "cunt",
+censoredSwear: "cu**",
+offensive: "true"
+},
+{
+swear: "cuntface",
+censoredSwear: "cu**fa**",
+offensive: "true"
+},
+{
+swear: "dickhead",
+censoredSwear: "di**he**",
+offensive: "true"
+},
+{
+swear: "dickwad",
+censoredSwear: "d**kw**",
+offensive: "true"
+},
+{
+swear: "dildo",
+censoredSwear: "di**o",
+offensive: "true"
+},
+{
+swear: "douche",
+censoredSwear: "do**he",
+offensive: "false"
+},
+{
+swear: "fag",
+censoredSwear: "f*g",
+offensive: "true"
+},
+{
+swear: "faggot",
+censoredSwear: "f*gg*t",
+offensive: "false"
+},
+{
+swear: "fuck",
+censoredSwear: "fu**",
+offensive: "false"
+},
+{
+swear: "fuckhead",
+censoredSwear: "fu**he**",
+offensive: "false"
+},
+{
+swear: "fuckup",
+censoredSwear: "fu**up",
+offensive: "false"
+},
+{
+swear: "fuckwit",
+censoredSwear: "fu**w*t",
+offensive: "false"
+},
+{
+swear: "honkey",
+censoredSwear: "ho**ey",
+offensive: "true"
+},
+{
+swear: "motherfucker",
+censoredSwear: "mo**er**ck**",
+offensive: "false"
+},
+{
+swear: "nigger",
+censoredSwear: "ni**er",
+offensive: "true"
+},
+{
+swear: "niglet",
+censoredSwear: "ni**et",
+offensive: "true"
+},
+{
+swear: "nigga",
+censoredSwear: "ni**a",
+offensive: "false"
+},
+{
+swear: "piss",
+censoredSwear: "pi**",
+offensive: "false"
+},
+{
+swear: "pissed",
+censoredSwear: "pi**ed",
+offensive: "false"
+},
+{
+swear: "retard",
+censoredSwear: "r*t**d",
+offensive: "true"
+},
+{
+swear: "retarded",
+censoredSwear: "r*t***ed",
+offensive: "true"
+},
+{
+swear: "shit",
+censoredSwear: "sh**",
+offensive: "false"
+},
+{
+swear: "shitfaced",
+censoredSwear: "sh**fa**d",
+offensive: "false"
+},
+{
+swear: "shithead",
+censoredSwear: "s***he**",
+offensive: "false"
+},
+{
+swear: "shitlord",
+censoredSwear: "sh**lord",
+offensive: "false"
+},
+{
+swear: "slut",
+censoredSwear: "sl**",
+offensive: "true"
+},
+{
+swear: "thundercunt",
+censoredSwear: "th**de**un*",
+offensive: "true"
+},
+{
+swear: "twat",
+censoredSwear: "tw**",
+offensive: "true"
+},
+{
+swear: "wanker",
+censoredSwear: "w*nk*r",
+offensive: "true"
+},
+{
+swear: "wanking",
+censoredSwear: "w**ki*g",
+offensive: "true"
+},
+{
+swear: "whore",
+censoredSwear: "wh**e",
+offensive: "true"
+},
+{
+swear: "whorebag",
+censoredSwear: "wh**eb**",
+offensive: "true"
+}
+]
