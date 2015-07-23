@@ -1,0 +1,148 @@
+html,
+body {
+  height: 100%;
+  overflow-y: hidden;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+.wrap {
+  max-width: 960px;
+  width: 100%;
+  margin: 0 auto;
+  height: 100%;
+  position: relative;
+}
+
+header {
+  height: 300px;
+  width: 100%;
+  background-color: #e34f50;
+}
+
+header .head-content {
+  padding-top: 30px;
+}
+
+.head-content img {
+  height: 40px;
+  margin-left: 10px;
+}
+
+.head-content .backButton {
+  padding: 10px 20px;
+  margin-right: 10px;
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  color: #e34f50;
+  background-color: white;
+  font-family: 'Open Sans';
+  font-weight: 300;
+  font-size: 9pt;
+  text-decoration: none;
+  float: right;
+  opacity: 0.9;
+  transition: opacity .25s;
+  -moz-transition: opacity .25s;
+  -webkit-transition: opacity .25s;
+}
+
+.head-content .backButton:hover {
+  opacity: 1;
+}
+
+#chat {
+  background-color: white;
+  box-shadow: 0px 0px 5px rgba(0,0,0,0.2);
+  position: absolute;
+  bottom: 350px;
+  top: -200px;
+  font-family: 'Open Sans';
+  font-weight: 300;
+  width: 100%;
+  padding-bottom: 10px;
+}
+
+form {
+  width: 100%;
+  background-color: #e34f50;
+  height: 50px;
+  position: fixed;
+  bottom: 0;
+  display: inline-block;
+  text-align: center;
+}
+
+form .wrap {
+  margin-top: 7.5px;
+}
+
+form input {
+  padding: 10px;
+  outline: none;
+  border: none;
+  width: 80%;
+  background-color: #ffffff;
+  color: #e34f50;
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  font-family: 'Open Sans';
+  font-weight: 300;
+}
+
+form button {
+  background: #ffffff;
+  color: #e34f50;
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  margin-left: 1%;
+  width: 10%;
+  border: none;
+  outline: none;
+  padding: 10px;
+  font-family: 'Open Sans';
+  font-weight: 300;
+  cursor: pointer;
+}
+
+#messages {
+  list-style: none;
+  overflow-y: scroll;
+  height: 100%;
+  padding: 10px;
+}
+
+#messages li {
+  padding: 10px;
+  border-bottom: 1px solid #efefef
+}
+
+#messages li:last-child {
+  border-bottom: none;
+}
+
+#messages li:nth-child(4n-3) {
+  color: #e34f50;
+}
+
+#messages li:nth-child(4n-2) {
+  color: #7EC7E3;
+}
+
+#messages li:nth-child(4n-1) {
+  color: #AD196F;
+}
+
+#messages li:nth-child(4n) {
+  color: #F9CD1D;
+}
+
+#messages li span {
+  font-weight: 600;
+}

@@ -1,4 +1,5 @@
-var app = require('express')();
+var express = require('express');
+var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
@@ -15,5 +16,5 @@ io.on('connection', function(socket){
 });
 
 http.listen(80, function(){
-  console.log('listening on *:80');
+  console.log('listening on Port 80');
 });
