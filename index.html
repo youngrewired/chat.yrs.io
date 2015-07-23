@@ -32,11 +32,18 @@
     <script>
     var x;
       $(function(){
-        x = prompt('Choose a Username');
+        ask();
       });
+      function ask() {
+        x = prompt('Choose a Username');
+        if(x == null || x == undefined || x == '') {
+          ask();
+        }
+      }
+
       var socket = io();
       $('form').submit(function(){
-        socket.emit('chat message', $('#message').val(), x);
+        socket.emit('chat message', $('#message').val(), x);  
         $('#message').val('');
         return false;
       });

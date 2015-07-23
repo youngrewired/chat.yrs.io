@@ -15,7 +15,19 @@ io.on('connection', function(socket){
   	if(msg == '' || msg == undefined || msg == null) {
   		return;
   	}
-    io.emit('chat message', msg.toString(), user);
+		var clean = sanitizeHtml(msg, {
+		  allowedTags: [ 'b', 'i', 'em', 'strong', 'a' ],
+		  allowedAttributes: {
+		    'a': [ 'href' ]
+		  }
+		});
+		var cleanUser = sanitizeHtml(user, {
+		  allowedTags: [ 'b', 'i', 'em', 'strong', 'a' ],
+		  allowedAttributes: {
+		    'a': [ 'href' ]
+		  }
+		});
+    io.emit('chat message', clean, cleanUser);
   });
 });
 
