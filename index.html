@@ -41,7 +41,7 @@
         return false;
       });
       socket.on('chat message', function(msg, user){
-        $('#messages').append($('<li>').html('<span>' + user + '</span>' + ': ' + msg));
+        $('#messages').prepend($('<li>').html('<span>' + user + '</span>' + ': ' + msg));
       });
     </script>
   </body>
