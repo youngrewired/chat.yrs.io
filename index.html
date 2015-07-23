@@ -31,20 +31,27 @@
     <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
     <script>
     var x;
+    var y = true;
       $(function(){
         ask();
       });
       function ask() {
         x = prompt('Choose a Username');
         if(x == null || x == undefined || x == '') {
-          ask();
+          // ask();
         }
       }
 
       var socket = io();
       $('form').submit(function(){
-        socket.emit('chat message', $('#message').val(), x);  
-        $('#message').val('');
+        if(y == false){
+          $('#messages').prepend($('<li>').html('<span><font color="red">Console</span>' + ': Please do not spam!</font>'));          
+        } else {
+          socket.emit('chat message', $('#message').val(), x);
+          y=false;
+          setTimeout(function(){y=true},2200);
+        }
+          $('#message').val('');
         return false;
       });
       socket.on('chat message', function(msg, user){
