@@ -1,0 +1,69 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Young Rewired State - Chat</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="/main.css"/>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:600,800,300' rel='stylesheet' type='text/css'>
+    <script src="//cdn.firebase.com/js/client/2.2.7/firebase.js"></script>
+  </head>
+  <body>
+    <div class="lightbox">
+      <a href="" id="twitter-button"><img src="/twitter-button.png"/></a>
+    </div>
+    <header>
+      <div class="wrap">
+        <div class="head-content">
+          <img class="ruby-eyes" src="/ruby-eyes.gif"/>
+          <a href="http://yrs.io" class="backButton">BACK TO YRS.IO</a>
+        </div>
+      </div>
+    </header>
+    <div class="wrap">
+      <div id="chat">
+        <ul id="messages"></ul>
+      </div>
+    </div>
+    <form action="">
+      <div class="wrap">
+        <input id="message" autocomplete="off" placeholder="New message..."/>
+        <button>Send</button>
+      </div>
+    </form>
+    <script src="//cdn.socket.io/socket.io-1.2.0.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.1.js"></script>
+    <script>
+    var ref = new Firebase("***firebase-url***");
+    var x;
+    var y = true;
+
+      $('#twitter-button').click(function() {
+        ref.authWithOAuthPopup("twitter", function(error, authData) {
+          if (error) {
+            console.log("Login Failed!", error);
+          } else {
+            console.log(authData.twitter.username);
+          }
+        });
+        return false;
+      });
+
+      var socket = io();
+      $('form').submit(function(){
+        if(y == false){
+          $('#messages').prepend($('<li>').html('<span><font color="red">Console</span>' + ': Please do not spam!</font>'));
+        } else {
+          socket.emit('chat message', $('#message').val(), "@" + x);
+          y=false;
+          setTimeout(function(){y=true},1500);
+        }
+        $('#message').val('');
+        return false;
+      });
+      socket.on('chat message', function(msg, user){
+        $('#messages').prepend($('<li>').html('<span>' + user + '</span>' + ': ' + msg));
+      });
+    </script>
+  </body>
+</html>
