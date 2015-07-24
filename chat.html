@@ -15,7 +15,7 @@
     <header>
       <div class="wrap">
         <div class="head-content">
-          <img class="ruby-eyes" src="/ruby-eyes.gif"/>
+          <img class="logo" src="/logo.png"/>
           <a href="http://yrs.io" class="backButton">BACK TO YRS.IO</a>
         </div>
       </div>
@@ -56,7 +56,7 @@
           var console = $('<li>').html('<span><font color="red">Console</span>' + ': Please do not spam!</font>')
           $('#messages').append(console).animate({scrollTop: $(document).height()}, "slow");
         } else {
-          socket.emit('chat message', $('#message').val(), "@" + x);
+          socket.emit('chat message', $('#message').val(), x);
           y=false;
           setTimeout(function(){y=true},500);
         }
@@ -64,7 +64,7 @@
         return false;
       });
       socket.on('chat message', function(msg, user){
-        var chat = $('<li>').html('<span>' + user + '</span>' + ': ' + msg);
+        var chat = $('<li>').html('<a href="https://twitter.com/'+ user +'" target="_blank">@' + user + '</a>' + ': ' + msg);
         $('#messages').append(chat).animate({scrollTop: $('#messages').height()}, "slow");
       });
     </script>

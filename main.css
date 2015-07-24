@@ -43,8 +43,9 @@ header .head-content {
   padding-top: 30px;
 }
 
-.head-content .ruby-eyes {
-  height: 40px;
+.head-content .logo {
+  height: 50px;
+  margin-top: -5px;
   margin-left: 10px;
 }
 
@@ -144,22 +145,23 @@ form button {
   border-bottom: none;
 }
 
-#messages li span {
+#messages li a {
   font-weight: 600;
+  text-decoration: none;
 }
 
-#messages li:nth-child(4n-3) span {
+#messages li:nth-child(4n-3) a {
   color: #e34f50;
 }
 
-#messages li:nth-child(4n-2) span {
+#messages li:nth-child(4n-2) a {
   color: #7EC7E3;
 }
 
-#messages li:nth-child(4n-1) span {
+#messages li:nth-child(4n-1) a {
   color: #AD196F;
 }
 
-#messages li:nth-child(4n) span {
+#messages li:nth-child(4n) a {
   color: #F9CD1D;
 }
