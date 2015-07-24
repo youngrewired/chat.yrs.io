@@ -65,7 +65,7 @@
       });
       socket.on('chat message', function(msg, user){
         if (user == 'RubyBot') {
-          var chat = $('<li>').html('<a class="bot-msg" href="#'+ user +'">@' + user + '</a>' + ': ' + msg);
+          var chat = $('<li class="bot-msg">').html('<a href="#'+ user +'">@' + user + '</a>' + ': ' + msg);
         } else{
           var chat = $('<li>').html('<a href="https://twitter.com/'+ user +'" target="_blank">@' + user + '</a>' + ': ' + msg);
         }
