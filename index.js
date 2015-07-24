@@ -17,7 +17,7 @@ app.get('/', function(req, res) {
 	var page = fs.readFileSync("./chat.html", "utf8", function(err, data) {
 		if (err) throw err;
 	});
-	
+
 	page = page.replace("***firebase-url***", config.firebase_url);
 	res.send(page);
 });
@@ -64,6 +64,6 @@ function wordInString(s, word){
 }
 
 http.listen(config.port, function(){
-	banned.push('SPAM');
+		banned.push('SPAM');
     console.log('listening on Port ' + config.port);
 });

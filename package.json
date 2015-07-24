@@ -1,7 +1,7 @@
 {
-  "name": "socket-chat-example",
+  "name": "YRS-Chat",
   "version": "0.0.1",
-  "description": "my first socket.io app",
+  "description": "Young Rewired State Chat.",
   "dependencies": {
     "badwords-list": "^1.0.0",
     "express": "4.10.2",

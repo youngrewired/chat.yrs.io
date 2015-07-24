@@ -43,7 +43,8 @@
           if (error) {
             console.log("Login Failed!", error);
           } else {
-            console.log(authData.twitter.username);
+            x = authData.twitter.username
+            $('.lightbox').fadeOut()
           }
         });
         return false;
