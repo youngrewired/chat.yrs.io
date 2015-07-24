@@ -67,6 +67,10 @@
         var chat = $('<li>').html('<a href="https://twitter.com/'+ user +'" target="_blank">@' + user + '</a>' + ': ' + msg);
         $('#messages').append(chat).animate({scrollTop: 1000000}, "slow");
       });
+
+      window.onbeforeunload = function(e) {
+        return 'Closing YRSChat means you will no longer receive messages';
+      };
     </script>
   </body>
 </html>
