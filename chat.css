@@ -246,3 +246,7 @@ form button {
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
 }
+
+#messages .server-msg {
+  color: red;
+}
