@@ -42,7 +42,7 @@ io.on('connection', function(socket){
 
 	});
 
-	socket.on('chat message', function(msg, user){
+	socket.on('chat message', function(msg, user, imageLink){
 		if(msg == '' || msg == undefined || msg == null) {
 			return;
 		}
@@ -61,13 +61,13 @@ io.on('connection', function(socket){
 			return;
 		}
 
-		msg = msg.replace("<", "&lt;");
-		msg = msg.replace(">", "&gt;");
+		msg = msg.replace(/</g, "&lt;");
+		msg = msg.replace(/>/g, "&gt;");
 
-		user = user.replace("<", "&lt;");
-		user = user.replace(">", "&gt;");
+		user = user.replace(/</g, "&lt;");
+		user = user.replace(/>/g, "&gt;");
 
-		io.emit('chat message', msg, user);
+		io.emit('chat message', msg, user, imageLink);
 	});
 });
 
@@ -76,6 +76,5 @@ function wordInString(s, word){
 }
 
 http.listen(config.port, function(){
-		banned.push('SPAM');
     console.log('listening on Port ' + config.port);
 });

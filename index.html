@@ -7,6 +7,8 @@
     <link rel="stylesheet" type="text/css" href="/main.css"/>
     <link href='//fonts.googleapis.com/css?family=Open+Sans:600,800,300,400' rel='stylesheet' type='text/css'>
     <script src="//cdn.firebase.com/js/client/2.2.7/firebase.js"></script>
+    <script src="//cdn.jsdelivr.net/emojione/1.5.0/lib/js/emojione.min.js"></script>
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/emojione/1.5.0/assets/css/emojione.min.css" />
   </head>
   <body>
     <div class="lightbox twitter">
@@ -35,8 +37,9 @@
     		<p>YRSChat was made by <a href="https://github.com/freddinator" target="_blank">Freddy Heppell</a>, <a href="https://github.com/brks" target="_blank">James Brooks</a>, <a href="https://github.com/MrMindImplosion" target="_blank">Levi Wright</a> and <a href="https://github.com/CodeLuca" target="_blank">Luca Marchal</a>. Thanks to <a href="https://github.com/phazonoverload">Kevin</a> from YRS for assisting us.</p>
     		<p>YRSChat is available on <a href="https://github.com/CodeLuca/yrs_chat">Github</a>. Please submit bugs and improvements. Uses Node.js, and a mixture of MongoDB and Firebase, running on DigitalOcean</p>
 
-    		<h4>Bots</h4>
-    		<p>RubyBot is here to service your every need. Type !help in chat to list all available commands</p>
+        <h4>Help</h4>
+        <p>A YRSChat guide is available <a href="https://github.com/CodeLuca/yrs_chat/wiki/YRSChat-Guide" target="_blank">here</a>.
+
       </div>
     </div>
     <header>
@@ -63,6 +66,53 @@
     <script src="//code.jquery.com/jquery-1.11.1.js"></script>
     <script src="/assets/linkify.min.js"></script>
     <script src="/assets/linkify-jquery.min.js"></script>
+<<<<<<< HEAD:index.html
     <script src="/chat.js"></script>
+=======
+    <script>
+
+
+    var ref = new Firebase("***firebase-url***");
+    var x;
+    var z;
+    var y = true;
+
+    $('.helpButton').click(function() {
+      $('.about-box').fadeIn(function() {
+        $('.close-button').click(function() {
+          $('.about-box').fadeOut()
+        });
+      })
+    });
+
+      $('#twitter-button').click(function() {
+        ref.authWithOAuthPopup("twitter", function(error, authData) {
+          if (error) {
+            console.log("Login Failed!", error);
+          } else {
+            x = authData.twitter.username
+            z = authData.twitter.profileImageURL
+            $('.twitter').fadeOut()
+          }
+        });
+        return false;
+      });
+
+      var socket = io();
+      $('form').submit(function(){
+        if(y == false){
+          var console = $('<li>').html('<span><font color="red">Server</span>' + ': Please do not spam!</font>')
+          $('#messages').append(console).animate({scrollTop: 1000000}, "slow");
+        } else {
+          socket.emit('chat message', $('#message').val(), x, z);
+          y=false;
+          setTimeout(function(){y=true},500);
+        }
+        $('#message').val('');
+        return false;
+      });
+
+    </script>
+>>>>>>> ca022144df3beb2d094154f8f3be0064a47ef419:chat.html
   </body>
 </html>
