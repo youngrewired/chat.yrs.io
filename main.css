@@ -136,29 +136,30 @@ form button {
 
 #messages li {
   padding: 10px;
-  border-bottom: 1px solid #efefef
+  border-bottom: 1px solid #efefef;
+  color: #000000;
 }
 
 #messages li:last-child {
   border-bottom: none;
 }
 
-#messages li:nth-child(4n-3) {
+#messages li span {
+  font-weight: 600;
+}
+
+#messages li span:nth-child(4n-3) {
   color: #e34f50;
 }
 
-#messages li:nth-child(4n-2) {
+#messages li span:nth-child(4n-2) {
   color: #7EC7E3;
 }
 
-#messages li:nth-child(4n-1) {
+#messages li span:nth-child(4n-1) {
   color: #AD196F;
 }
 
-#messages li:nth-child(4n) {
+#messages li span:nth-child(4n) {
   color: #F9CD1D;
-}
-
-#messages li span {
-  font-weight: 600;
 }
