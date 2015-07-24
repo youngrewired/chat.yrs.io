@@ -54,7 +54,7 @@
       $('form').submit(function(){
         if(y == false){
           var console = $('<li>').html('<span><font color="red">Console</span>' + ': Please do not spam!</font>')
-          $('#messages').append(console).animate({scrollTop: $(document).height()}, "slow");
+          $('#messages').append(console).animate({scrollTop: 1000000}, "slow");
         } else {
           socket.emit('chat message', $('#message').val(), "@" + x);
           y=false;
@@ -65,7 +65,7 @@
       });
       socket.on('chat message', function(msg, user){
         var chat = $('<li>').html('<span>' + user + '</span>' + ': ' + msg);
-        $('#messages').append(chat).animate({scrollTop: $('#messages').height()}, "slow");
+        $('#messages').append(chat).animate({scrollTop: 1000000}, "slow");
       });
     </script>
   </body>
