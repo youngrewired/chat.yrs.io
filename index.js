@@ -2,7 +2,6 @@ var express = require('express');
 var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
-var sanitizeHtml = require('sanitize-html');
 var fs = require('fs');
 app.use(express.static(__dirname));
 var list = require('badwords-list');
@@ -43,12 +42,9 @@ io.on('connection', function(socket){
 			return;
 		}
 
-		var clean = sanitizeHtml(msg, {
-			allowedTags: [ 'b', 'i', 'em', 'strong']
-		});
-		var cleanUser = sanitizeHtml(user, {
-			allowedTags: [ 'b', 'i', 'em', 'strong']
-		});
+		msg = msg.replace("<", "&lt;"); 
+		msg = msg.replace(">", "&gt;"); 
+
 		io.emit('chat message', clean, cleanUser);
 	});
 });
