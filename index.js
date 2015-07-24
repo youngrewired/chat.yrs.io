@@ -14,7 +14,7 @@ var data = fs.readFileSync("config.json", "utf8", function(err, data) {
 var config = JSON.parse(data);
 
 app.get('/', function(req, res) {
-	var page = fs.readFileSync("./chat.html", "utf8", function(err, data) {
+	var page = fs.readFileSync("./index.html", "utf8", function(err, data) {
 		if (err) throw err;
 	});
 
