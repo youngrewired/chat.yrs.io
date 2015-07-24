@@ -206,7 +206,7 @@ form button {
 #messages li .message {
   display: inline;
   position: relative;
-  top: -10px;
+  top: -20px;
 }
 
 #messages li .profileImage {
