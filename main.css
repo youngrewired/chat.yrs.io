@@ -78,6 +78,10 @@ body {
   transform: translateY(-50%);
 }
 
+.twitter {
+  display: none;
+}
+
 header {
   height: 300px;
   width: 100%;
