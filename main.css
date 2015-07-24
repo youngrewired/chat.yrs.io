@@ -203,6 +203,21 @@ form button {
   text-decoration: none;
 }
 
+#messages li .message {
+  display: inline;
+  position: relative;
+  top: -10px;
+}
+
+#messages li .profileImage {
+  width: 35px;
+  height: 35px;
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  margin-right: 10px;
+}
+
 #messages li:nth-child(4n-3) .twitter-link {
   color: #e34f50;
 }
@@ -222,7 +237,7 @@ form button {
 #messages .bot-msg {
   margin: 10px;
   padding: 20px 10px;
-  background-color: #CFCED0;
+  background-color: #D9D7DA;
   border-radius: 5px;
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px;

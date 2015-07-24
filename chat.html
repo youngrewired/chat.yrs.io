@@ -68,6 +68,7 @@
 
     var ref = new Firebase("***firebase-url***");
     var x;
+    var z;
     var y = true;
 
     $('.helpButton').click(function() {
@@ -84,6 +85,7 @@
             console.log("Login Failed!", error);
           } else {
             x = authData.twitter.username
+            z = authData.twitter.profileImageURL
             $('.twitter').fadeOut()
           }
         });
@@ -96,18 +98,18 @@
           var console = $('<li>').html('<span><font color="red">Server</span>' + ': Please do not spam!</font>')
           $('#messages').append(console).animate({scrollTop: 1000000}, "slow");
         } else {
-          socket.emit('chat message', $('#message').val(), x);
+          socket.emit('chat message', $('#message').val(), x, z);
           y=false;
           setTimeout(function(){y=true},500);
         }
         $('#message').val('');
         return false;
       });
-      socket.on('chat message', function(msg, user){
+      socket.on('chat message', function(msg, user, imageLink){
         if (user == 'RubyBot') {
-          var chat = $('<li class="bot-msg">').html('<a href="#">@' + user + '</a>' + ': ' + msg);
+          var chat = $('<li class="bot-msg">').html('<a>' + user + '</a>' + ': ' + msg);
         } else{
-          var chat = $('<li>').html('<a class="twitter-link" href="https://twitter.com/'+ user +'" target="_blank">@' + user + '</a>' + ': ' + msg);
+          var chat = $('<li>').html('<a href="https://twitter.com/'+ user +'" target="_blank"><img class="profileImage" src="' + imageLink + '"/></a><div class="message"><a class="twitter-link" href="https://twitter.com/'+ user +'" target="_blank">@' + user + '</a>' + ': ' + msg + '</div>');
         }
         $('#messages').append(chat).animate({scrollTop: 1000000}, "slow");
 

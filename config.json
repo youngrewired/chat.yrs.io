@@ -1,4 +1,4 @@
 {
 	"firebase_url": "https://yrschat.firebaseio.com/",
-	"port":3000
+	"port":80
 }

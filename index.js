@@ -24,7 +24,7 @@ app.get('/', function(req, res) {
 
 
 io.on('connection', function(socket){
-	socket.on('chat message', function(msg, user){
+	socket.on('chat message', function(msg, user, imageLink){
 		if(msg == '' || msg == undefined || msg == null) {
 			return;
 		}
@@ -49,7 +49,7 @@ io.on('connection', function(socket){
 		var cleanUser = sanitizeHtml(user, {
 			allowedTags: [ 'b', 'i', 'em', 'strong']
 		});
-		io.emit('chat message', clean, cleanUser);
+		io.emit('chat message', clean, cleanUser, imageLink);
 	});
 });
 
