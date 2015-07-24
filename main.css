@@ -148,18 +148,18 @@ form button {
   font-weight: 600;
 }
 
-#messages li span:nth-child(4n-3) {
+#messages li:nth-child(4n-3) span {
   color: #e34f50;
 }
 
-#messages li span:nth-child(4n-2) {
+#messages li:nth-child(4n-2) span {
   color: #7EC7E3;
 }
 
-#messages li span:nth-child(4n-1) {
+#messages li:nth-child(4n-1) span {
   color: #AD196F;
 }
 
-#messages li span:nth-child(4n) {
+#messages li:nth-child(4n) span {
   color: #F9CD1D;
 }
