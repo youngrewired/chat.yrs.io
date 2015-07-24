@@ -216,8 +216,8 @@ form button {
 
 #messages .bot-msg {
   margin: 10px;
-  padding: 10px;
-  background-color: #BCBCBC;
+  padding: 20px 10px;
+  background-color: #CFCED0;
   border-radius: 5px;
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
