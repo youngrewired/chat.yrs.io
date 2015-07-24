@@ -5,8 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="/main.css"/>
-    <link href='http://fonts.googleapis.com/css?family=Open+Sans:600,800,300' rel='stylesheet' type='text/css'>
-    <script src="https://cdn.firebase.com/js/client/2.2.7/firebase.js"></script>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:600,800,300' rel='stylesheet' type='text/css'>
+    <script src="//cdn.firebase.com/js/client/2.2.7/firebase.js"></script>
   </head>
   <body>
     <div class="lightbox">
@@ -31,8 +31,8 @@
         <button>Send</button>
       </div>
     </form>
-    <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
-    <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+    <script src="//cdn.socket.io/socket.io-1.2.0.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.1.js"></script>
     <script>
     var ref = new Firebase("***firebase-url***");
     var x;
@@ -46,7 +46,8 @@
             console.log(authData.twitter.username);
           }
         });
-      })
+        return false;
+      });
 
       var socket = io();
       $('form').submit(function(){
@@ -57,7 +58,7 @@
           y=false;
           setTimeout(function(){y=true},1500);
         }
-          $('#message').val('');
+        $('#message').val('');
         return false;
       });
       socket.on('chat message', function(msg, user){
