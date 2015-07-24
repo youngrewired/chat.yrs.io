@@ -44,16 +44,10 @@ io.on('connection', function(socket){
 		}
 
 		var clean = sanitizeHtml(msg, {
-			allowedTags: [ 'b', 'i', 'em', 'strong', 'a' ],
-			allowedAttributes: {
-				'a': [ 'href' ]
-			}
+			allowedTags: [ 'b', 'i', 'em', 'strong']
 		});
 		var cleanUser = sanitizeHtml(user, {
-			allowedTags: [ 'b', 'i', 'em', 'strong', 'a' ],
-			allowedAttributes: {
-				'a': [ 'href' ]
-			}
+			allowedTags: [ 'b', 'i', 'em', 'strong']
 		});
 		io.emit('chat message', clean, cleanUser);
 	});
