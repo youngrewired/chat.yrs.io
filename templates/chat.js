@@ -15,12 +15,13 @@ $('.helpButton').click(function() {
   })
 });
 
-function showMessage(msg, user) {
+function showMessage(msg, user, imageLink) {
+  msg = emojione.toImage(msg);
   var messageElement;
-  if (user == 'RubyBot' || user == "Server") {
-    messageElement = $('<li class="bot-msg">').html('<a href="#">@' + user + '</a>' + ': ' + msg);
-  } else {
-    messageElement = $('<li>').html('<a class="twitter-link" href="https://twitter.com/'+ user +'" target="_blank">@' + user + '</a>' + ': ' + msg);
+  if (user == 'RubyBot') {
+    messageElement = $('<li class="bot-msg">').html('<a href="http://yrs.io">' + user + '</a>' + ': ' + msg);
+  } else{
+    messageElement = $('<li>').html('<a href="https://twitter.com/'+ user +'" target="_blank"><img class="profileImage" src="' + imageLink + '"/></a><div class="message"><a class="twitter-link" href="https://twitter.com/'+ user +'" target="_blank">@' + user + '</a>' + ': ' + msg + '</div>');
   }
   $('#messages').append(messageElement).animate({scrollTop: 1000000}, "slow");
   $('li').linkify({
@@ -56,7 +57,10 @@ $('form').submit(function(){
     $('#messages').append(console).animate({scrollTop: 1000000}, "slow");
 
   } else {
-    socket.emit('chat message', msgbox.val(), authData.twitter.username);
+    socket.emit('chat message',
+      msgbox.val(),
+      authData.twitter.username,
+      authData.twitter.profileImageURL);
     canPost=false;
     setTimeout(function(){canPost=true},500);
   }
