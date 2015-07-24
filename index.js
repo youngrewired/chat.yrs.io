@@ -42,11 +42,11 @@ io.on('connection', function(socket){
 			return;
 		}
 
-		msg = msg.replace("<", "&lt;");
-		msg = msg.replace(">", "&gt;");
+		msg = msg.replace(/</g, "&lt;");
+		msg = msg.replace(/>/g, "&gt;");
 
-		user = user.replace("<", "&lt;");
-		user = user.replace(">", "&gt;");
+		user = user.replace(/</g, "&lt;");
+		user = user.replace(/>/g, "&gt;");
 
 		io.emit('chat message', msg, user);
 	});
