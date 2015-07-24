@@ -43,7 +43,8 @@
           if (error) {
             console.log("Login Failed!", error);
           } else {
-            console.log(authData.twitter.username);
+            x = authData.twitter.username
+            $('.lightbox').fadeOut()
           }
         });
         return false;
@@ -52,17 +53,19 @@
       var socket = io();
       $('form').submit(function(){
         if(y == false){
-          $('#messages').prepend($('<li>').html('<span><font color="red">Console</span>' + ': Please do not spam!</font>'));
+          var console = $('<li>').html('<span><font color="red">Console</span>' + ': Please do not spam!</font>')
+          $('#messages').append(console).animate({scrollTop: $(document).height()}, "slow");
         } else {
           socket.emit('chat message', $('#message').val(), "@" + x);
           y=false;
-          setTimeout(function(){y=true},1500);
+          setTimeout(function(){y=true},500);
         }
         $('#message').val('');
         return false;
       });
       socket.on('chat message', function(msg, user){
-        $('#messages').prepend($('<li>').html('<span>' + user + '</span>' + ': ' + msg));
+        var chat = $('<li>').html('<span>' + user + '</span>' + ': ' + msg);
+        $('#messages').append(chat).animate({scrollTop: $('#messages').height()}, "slow");
       });
     </script>
   </body>
