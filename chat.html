@@ -7,6 +7,8 @@
     <link rel="stylesheet" type="text/css" href="/main.css"/>
     <link href='//fonts.googleapis.com/css?family=Open+Sans:600,800,300,400' rel='stylesheet' type='text/css'>
     <script src="//cdn.firebase.com/js/client/2.2.7/firebase.js"></script>
+    <script src="//cdn.jsdelivr.net/emojione/1.5.0/lib/js/emojione.min.js"></script>
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/emojione/1.5.0/assets/css/emojione.min.css" />
   </head>
   <body>
     <div class="lightbox twitter">
@@ -104,14 +106,17 @@
         return false;
       });
       socket.on('chat message', function(msg, user){
+        msg = emojione.toImage(msg);
+
         if (user == 'RubyBot') {
           var chat = $('<li class="bot-msg">').html('<a href="#">@' + user + '</a>' + ': ' + msg);
         } else{
           var chat = $('<li>').html('<a class="twitter-link" href="https://twitter.com/'+ user +'" target="_blank">@' + user + '</a>' + ': ' + msg);
         }
+
         $('#messages').append(chat).animate({scrollTop: 1000000}, "slow");
 
-            $('li').linkify({
+          $('li').linkify({
               target: "_blank"
           });
       });
