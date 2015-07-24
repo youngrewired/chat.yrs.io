@@ -165,3 +165,7 @@ form button {
 #messages li:nth-child(4n) a {
   color: #F9CD1D;
 }
+
+#messages .bot-msg {
+  background-color: #FF0;
+}
