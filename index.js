@@ -5,6 +5,7 @@ var io = require('socket.io')(http);
 var fs = require('fs');
 app.use(express.static(__dirname));
 var list = require('badwords-list');
+var Firebase = require("firebase");
 banned = list.array;
 
 var data = fs.readFileSync("config.json", "utf8", function(err, data) {
@@ -12,17 +13,35 @@ var data = fs.readFileSync("config.json", "utf8", function(err, data) {
 });
 var config = JSON.parse(data);
 
+var ref = new Firebase(config.firebase_url);
+
 app.get('/', function(req, res) {
-	var page = fs.readFileSync("./chat.html", "utf8", function(err, data) {
+	res.sendFile("./index.html");
+});
+
+app.get("/chat.js", function(req, res) {
+	var page = fs.readFileSync("./templates/chat.js", "utf8", function(err, data) {
 		if (err) throw err;
 	});
-
 	page = page.replace("***firebase-url***", config.firebase_url);
-	res.send(page);
+	res.send(page)
 });
 
 
 io.on('connection', function(socket){
+	socket.on("user join", function(token){
+		var auth = ref.authWithCustomToken(token, function(error, data){
+			if (error){
+				return
+			}
+		});
+
+	});
+
+	socket.on("user leave", function(token){
+
+	});
+
 	socket.on('chat message', function(msg, user){
 		if(msg == '' || msg == undefined || msg == null) {
 			return;

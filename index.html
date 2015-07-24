@@ -63,62 +63,6 @@
     <script src="//code.jquery.com/jquery-1.11.1.js"></script>
     <script src="/assets/linkify.min.js"></script>
     <script src="/assets/linkify-jquery.min.js"></script>
-    <script>
-
-
-    var ref = new Firebase("***firebase-url***");
-    var x;
-    var y = true;
-
-    $('.helpButton').click(function() {
-      $('.about-box').fadeIn(function() {
-        $('.close-button').click(function() {
-          $('.about-box').fadeOut()
-        });
-      })
-    });
-
-      $('#twitter-button').click(function() {
-        ref.authWithOAuthPopup("twitter", function(error, authData) {
-          if (error) {
-            console.log("Login Failed!", error);
-          } else {
-            x = authData.twitter.username
-            $('.twitter').fadeOut()
-          }
-        });
-        return false;
-      });
-
-      var socket = io();
-      $('form').submit(function(){
-        if(y == false){
-          var console = $('<li>').html('<span><font color="red">Server</span>' + ': Please do not spam!</font>')
-          $('#messages').append(console).animate({scrollTop: 1000000}, "slow");
-        } else {
-          socket.emit('chat message', $('#message').val(), x);
-          y=false;
-          setTimeout(function(){y=true},500);
-        }
-        $('#message').val('');
-        return false;
-      });
-      socket.on('chat message', function(msg, user){
-        if (user == 'RubyBot') {
-          var chat = $('<li class="bot-msg">').html('<a href="#">@' + user + '</a>' + ': ' + msg);
-        } else{
-          var chat = $('<li>').html('<a class="twitter-link" href="https://twitter.com/'+ user +'" target="_blank">@' + user + '</a>' + ': ' + msg);
-        }
-        $('#messages').append(chat).animate({scrollTop: 1000000}, "slow");
-
-            $('li').linkify({
-              target: "_blank"
-          });
-      });
-
-      window.onbeforeunload = function(e) {
-        return 'Closing YRS Chat means you will no longer receive messages';
-      };
-    </script>
+    <script src="/chat.js"></script>
   </body>
 </html>
