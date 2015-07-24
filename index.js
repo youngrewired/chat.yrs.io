@@ -57,6 +57,5 @@ function wordInString(s, word){
 }
 
 http.listen(config.port, function(){
-		banned.push('SPAM');
     console.log('listening on Port ' + config.port);
 });
