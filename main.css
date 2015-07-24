@@ -17,6 +17,22 @@ body {
   position: relative;
 }
 
+.lightbox {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  background-color: rgba(0,0,0,0.6);
+  z-index: 100;
+  display: inline-block;
+  text-align: center;
+}
+
+#twitter-button {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
 header {
   height: 300px;
   width: 100%;
@@ -27,7 +43,7 @@ header .head-content {
   padding-top: 30px;
 }
 
-.head-content img {
+.head-content .ruby-eyes {
   height: 40px;
   margin-left: 10px;
 }

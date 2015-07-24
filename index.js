@@ -51,7 +51,7 @@ function wordInString(s, word){
   return new RegExp( '\\b' + word + '\\b', 'i').test(s);
 }
 
-http.listen(80, function(){
+http.listen(3000, function(){
 	banned.push('SPAM')
-  console.log('listening on Port 80');
+  	console.log('listening on Port 3000');
 });
