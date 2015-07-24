@@ -9,14 +9,42 @@
     <script src="//cdn.firebase.com/js/client/2.2.7/firebase.js"></script>
   </head>
   <body>
-    <div class="lightbox">
+    <div class="lightbox twitter">
       <a href="" id="twitter-button"><img src="/twitter-button.png"/></a>
+    </div>
+    <div class="lightbox about-box">
+      <div id="about">
+        <h1>About</h1>
+        <a class="close-button">X</a>
+    		<h4>Rules</h4>
+    		<ul>
+    			<li>Usernames and chat messages must be swear-free</li>
+    			<li>No spamming</li>
+    			<li>No unauthorised bots</li>
+    		</ul>
+
+    		<h4>Prefixes</h4>
+    		<ul>
+    			<li>[M] - Mentor</li>
+    			<li>[C] - Centre Lead</li>
+    			<li>[Y] - YRS/RS Staff</li>
+    			<li>[D] - YRSChat Developer</li>
+    		</ul>
+
+    		<h4>Developers</h4>
+    		<p>YRSChat was made by <a href="https://github.com/freddinator" target="_blank">Freddy Heppell</a>, <a href="https://github.com/brks" target="_blank">James Brooks</a>, <a href="https://github.com/MrMindImplosion" target="_blank">Levi Wright</a> and <a href="https://github.com/CodeLuca" target="_blank">Luca Marchal</a>. Thanks to <a href="https://github.com/phazonoverload">Kevin</a> from YRS for assisting us.</p>
+    		<p>YRSChat is available on <a href="https://github.com/CodeLuca/yrs_chat">Github</a>. Please submit bugs and improvements. Uses Node.js, and a mixture of MongoDB and Firebase, running on DigitalOcean</p>
+
+    		<h4>Bots</h4>
+    		<p>RubyBot is here to service your every need. Type !help in chat to list all available commands</p>
+      </div>
     </div>
     <header>
       <div class="wrap">
         <div class="head-content">
           <img class="logo" src="/logo.png"/>
           <a href="http://yrs.io" class="backButton">BACK TO YRS.IO</a>
+          <a class="helpButton">?</a>
         </div>
       </div>
     </header>
@@ -38,13 +66,21 @@
     var x;
     var y = true;
 
+    $('.helpButton').click(function() {
+      $('.about-box').fadeIn(function() {
+        $('.close-button').click(function() {
+          $('.about-box').fadeOut()
+        });
+      })
+    });
+
       $('#twitter-button').click(function() {
         ref.authWithOAuthPopup("twitter", function(error, authData) {
           if (error) {
             console.log("Login Failed!", error);
           } else {
             x = authData.twitter.username
-            $('.lightbox').fadeOut()
+            $('.twitter').fadeOut()
           }
         });
         return false;
@@ -69,7 +105,7 @@
       });
 
       window.onbeforeunload = function(e) {
-        return 'Closing YRSChat means you will no longer receive messages';
+        return 'Closing YRS Chat means you will no longer receive messages';
       };
     </script>
   </body>
