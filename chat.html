@@ -111,7 +111,7 @@
       socket.on('chat message', function(msg, user, imageLink){
         msg = emojione.toImage(msg);
         if (user == 'RubyBot') {
-          var chat = $('<li class="bot-msg">').html('<a>' + user + '</a>' + ': ' + msg);
+          var chat = $('<li class="bot-msg">').html('<a href="http://yrs.io">' + user + '</a>' + ': ' + msg);
         } else{
           var chat = $('<li>').html('<a href="https://twitter.com/'+ user +'" target="_blank"><img class="profileImage" src="' + imageLink + '"/></a><div class="message"><a class="twitter-link" href="https://twitter.com/'+ user +'" target="_blank">@' + user + '</a>' + ': ' + msg + '</div>');
         }
