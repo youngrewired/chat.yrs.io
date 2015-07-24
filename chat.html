@@ -7,6 +7,8 @@
     <link rel="stylesheet" type="text/css" href="/main.css"/>
     <link href='//fonts.googleapis.com/css?family=Open+Sans:600,800,300,400' rel='stylesheet' type='text/css'>
     <script src="//cdn.firebase.com/js/client/2.2.7/firebase.js"></script>
+    <script src="//cdn.jsdelivr.net/emojione/1.5.0/lib/js/emojione.min.js"></script>
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/emojione/1.5.0/assets/css/emojione.min.css" />
   </head>
   <body>
     <div class="lightbox twitter">
@@ -15,7 +17,7 @@
     <div class="lightbox about-box">
       <div id="about">
         <h1>About</h1>
-        <a class="close-button">X</a>
+        <a class="close-button">&times;</a>
     		<h4>Rules</h4>
     		<ul>
     			<li>Usernames and chat messages must be swear-free</li>
@@ -35,8 +37,9 @@
     		<p>YRSChat was made by <a href="https://github.com/freddinator" target="_blank">Freddy Heppell</a>, <a href="https://github.com/brks" target="_blank">James Brooks</a>, <a href="https://github.com/MrMindImplosion" target="_blank">Levi Wright</a> and <a href="https://github.com/CodeLuca" target="_blank">Luca Marchal</a>. Thanks to <a href="https://github.com/phazonoverload">Kevin</a> from YRS for assisting us.</p>
     		<p>YRSChat is available on <a href="https://github.com/CodeLuca/yrs_chat">Github</a>. Please submit bugs and improvements. Uses Node.js, and a mixture of MongoDB and Firebase, running on DigitalOcean</p>
 
-    		<h4>Bots</h4>
-    		<p>RubyBot is here to service your every need. Type !help in chat to list all available commands</p>
+        <h4>Help</h4>
+        <p>A YRSChat guide is available <a href="https://github.com/CodeLuca/yrs_chat/wiki/YRSChat-Guide" target="_blank">here</a>.
+
       </div>
     </div>
     <header>
@@ -106,14 +109,16 @@
         return false;
       });
       socket.on('chat message', function(msg, user, imageLink){
+        msg = emojione.toImage(msg);
         if (user == 'RubyBot') {
           var chat = $('<li class="bot-msg">').html('<a>' + user + '</a>' + ': ' + msg);
         } else{
           var chat = $('<li>').html('<a href="https://twitter.com/'+ user +'" target="_blank"><img class="profileImage" src="' + imageLink + '"/></a><div class="message"><a class="twitter-link" href="https://twitter.com/'+ user +'" target="_blank">@' + user + '</a>' + ': ' + msg + '</div>');
         }
+
         $('#messages').append(chat).animate({scrollTop: 1000000}, "slow");
 
-            $('li').linkify({
+          $('li').linkify({
               target: "_blank"
           });
       });
