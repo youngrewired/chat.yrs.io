@@ -206,7 +206,7 @@ form button {
 #messages li .message {
   display: inline;
   position: relative;
-  top: -20px;
+  top: -10px;
 }
 
 #messages li .profileImage {
@@ -216,7 +216,6 @@ form button {
   -moz-border-radius: 3px;
   -webkit-border-radius: 3px;
   margin-right: 10px;
-  margin-bottom: 10px;
 }
 
 #messages li:nth-child(4n-3) .twitter-link {
