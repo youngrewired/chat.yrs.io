@@ -18,8 +18,6 @@ $('.helpButton').click(function() {
 function showMessage(msg, user, imageLink) {
   msg = emojione.toImage(msg);
 
-
-
   var messageElement;
   if (user == 'RubyBot') {
     messageElement = $('<li class="bot-msg">').html('<a href="http://yrs.io">' + user + '</a>' + ': ' + msg);
@@ -30,10 +28,8 @@ function showMessage(msg, user, imageLink) {
   } else {
 
     if (!imageLink || imageLink == ''){
-      console.log("1");
       messageElement = $('<li>').html('<a href="https://twitter.com/'+ user +'" target="_blank"></a><div class="message"><a class="twitter-link" href="https://twitter.com/'+ user +'" target="_blank">@' + user + '</a>' + ': ' + msg + '</div>');
     } else {
-      console.log("2");
       messageElement = $('<li>').html('<a href="https://twitter.com/'+ user +'" target="_blank"><img class="profileImage" src="' + imageLink + '"/></a><div class="message"><a class="twitter-link" href="https://twitter.com/'+ user +'" target="_blank">@' + user + '</a>' + ': ' + msg + '</div>');
     }
 
