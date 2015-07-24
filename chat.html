@@ -64,9 +64,7 @@
     <script src="/assets/linkify.min.js"></script>
     <script src="/assets/linkify-jquery.min.js"></script>
     <script>
-    $('li').linkify({
-        target: "_blank"
-    });
+
 
     var ref = new Firebase("***firebase-url***");
     var x;
@@ -112,6 +110,10 @@
           var chat = $('<li>').html('<a href="https://twitter.com/'+ user +'" target="_blank">@' + user + '</a>' + ': ' + msg);
         }
         $('#messages').append(chat).animate({scrollTop: 1000000}, "slow");
+
+            $('li').linkify({
+              target: "_blank"
+          });
       });
 
       window.onbeforeunload = function(e) {
