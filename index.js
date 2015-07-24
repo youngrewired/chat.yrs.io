@@ -48,7 +48,7 @@ io.on('connection', function(socket){
 		user = user.replace(/</g, "&lt;");
 		user = user.replace(/>/g, "&gt;");
 
-		io.emit('chat message', clean, cleanUser, imageLink);
+		io.emit('chat message', msg, user, imageLink);
 	});
 });
 
