@@ -32,10 +32,11 @@ function updateSoundPrefButton(){
     console.log(localStorage.getItem("soundPref"))
 }
 
-$(document).ready(function(){
+$(window).ready(function(){
   updateSoundPrefButton();
 });
 
+$("#soundPref").click(toggleSoundPref());
 
 function toggleSoundPref(){
   if (localStorage.getItem("soundPref") == "true"){
