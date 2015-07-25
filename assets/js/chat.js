@@ -5,8 +5,8 @@ var socket = io();
 var canPost = true;
 var authData;
 var unreadMessages =  false;
-var soundEnabledText = "Sound on"
-var soundDisabledTest = "Sound off"
+var soundEnabledText = "Sound on";
+var soundDisabledText = "Sound off";
 
 var msgbox = $("#message");
 
@@ -22,28 +22,25 @@ $('.helpButton').click(function() {
 function updateSoundPrefButton(){
   // Check localstorage
   if (localStorage.getItem("soundPref") === null){
-    localStorage.setItem("soundPref", true)
-  }else if (localStorage.getItem("soundPref") == "true"){
+    localStorage.setItem("soundPref", 1)
+  }else if (localStorage.getItem("soundPref") == 1){
     document.getElementById("soundPref").innerHTML = soundEnabledText;
   }else{
-    document.getElementById("soundPref").innerHTML = soundDisabledTest;
+    document.getElementById("soundPref").innerHTML = soundDisabledText;
   }
-
     console.log(localStorage.getItem("soundPref"))
 }
-
-$(document).ready(function(){
-  updateSoundPrefButton();
-});
-
-$("#soundPref").click(toggleSoundPref());
+updateSoundPrefButton();
+  
+$("#soundPref").click(toggleSoundPref);
 
 function toggleSoundPref(){
-  if (localStorage.getItem("soundPref") == "true"){
-    localStorage.getItem("soundPref") == "false"
-  }else{
-    localStorage.getItem("soundPref") == "true"
+  if (localStorage.getItem("soundPref") == 1){
+    localStorage.setItem("soundPref", 0);
+  } else {
+    localStorage.setItem("soundPref", 1);
   }
+
   updateSoundPrefButton()
 }
 
