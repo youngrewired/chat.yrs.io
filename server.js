@@ -32,6 +32,21 @@ var config = JSON.parse(data);
 var ref = new Firebase(config.firebase_url);
 users = {};
 
+function ban(msg, m, fn, userObj) {
+	if(m.length == 1) {
+		fn({
+			status: "failed",
+			message: "!ban [user]"
+		});
+	} else if (m.length == 2) {
+		db.bans.insert({
+			'user': m[1],
+			'time': Date.now(),
+			'by': userObj
+		});
+	}
+}
+
 function User(token, username, imageLink) {
 		return {
 			token: token,
@@ -196,21 +211,6 @@ io.on('connection', function(socket){
 		});
 	});
 });
-
-function ban(msg, m, fn, userObj) {
-	if(m.length == 1) {
-		fn({
-			status: "failed",
-			message: "!ban [user]"
-		});
-	} else if (m.length == 2) {
-		db.bans.insert({
-			'user': m[1],
-			'time': Date.now(),
-			'by': userObj
-		});
-	}
-}
 
 function wordInString(s, word){
 	return new RegExp( '\\b' + word + '\\b', 'i').test(s);
