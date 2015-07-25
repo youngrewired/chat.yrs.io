@@ -27,7 +27,6 @@ var data = fs.readFileSync("config.json", "utf8", function(err, data) {
 var config = JSON.parse(data);
 
 var ref = new Firebase(config.firebase_url);
-console.log(config.firebase_url);
 users = {};
 
 function User(username, imageLink) {

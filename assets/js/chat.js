@@ -32,7 +32,7 @@ function showMessage(msg, user, tags, imageLink) {
         '<a href="https://twitter.com/'+ user +'" target="_blank"></a>' +
         '<div class="message">' +
         '<a class="twitter-link" href="https://twitter.com/'+ user +'" target="_blank">@' + user + '</a><span class="label">' + tags + '</span>' +
-        ': ' + msg + '</div>'
+        '<p class="msg">' + msg + '</p></div>'
       );
     } else {
       messageElement = $('<li>').html(
