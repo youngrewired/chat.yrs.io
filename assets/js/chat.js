@@ -32,7 +32,7 @@ window.onfocus = function() {
   updateTitle();
 };
 
-function showMessage(msg, user, tags, imageLink) {
+function showMessage(msg, user, tags, imageLink, colour) {
   msg = emojione.toImage(msg);
 
   var messageElement;
@@ -48,14 +48,14 @@ function showMessage(msg, user, tags, imageLink) {
       messageElement = $('<li>').html(
         '<a href="https://twitter.com/'+ user +'" target="_blank"></a>' +
         '<div class="message">' +
-        '<a class="twitter-link" href="https://twitter.com/'+ user +'" target="_blank">@' + user + '</a><span class="label label-' + tags + '">' + tags + '</span>' +
+        '<a style="color: ' + colour + ';" class="twitter-link" href="https://twitter.com/'+ user +'" target="_blank">@' + user + '</a><span class="label label-' + tags + '">' + tags + '</span>' +
         '<p class="msg">' + msg + '</p></div>'
       );
     } else {
       messageElement = $('<li>').html(
         '<a href="https://twitter.com/'+ user +'" target="_blank"><img class="profileImage" src="' + imageLink + '"/></a>' +
         '<div class="message">' +
-        '<a class="twitter-link" href="https://twitter.com/'+ user +'" target="_blank">@' + user + '</a><span class="label label-' + tags + '">' + tags + '</span>' +
+        '<a style="color: ' + colour + ';" class="twitter-link" href="https://twitter.com/'+ user +'" target="_blank">@' + user + '</a><span class="label label-' + tags + '">' + tags + '</span>' +
         '<p class="msg">' + msg + '</p></div>'
       );
     }
@@ -121,7 +121,7 @@ $('form').submit(function(){
 
 
 socket.on('chat message', function(message, user) {
-  showMessage(message, user.name, user.tags, user.image);
+  showMessage(message, user.name, user.tags, user.image, user.colour);
 });
 
 
