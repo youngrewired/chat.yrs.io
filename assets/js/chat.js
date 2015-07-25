@@ -43,7 +43,9 @@ function showMessage(msg, user, tags, imageLink) {
       );
     }
   }
-  messageElement.linkify({target: "_blank"});
+  messageElement.linkify({
+    target: "_blank"
+  });
   $('#messages').append(messageElement).animate({scrollTop: 1000000}, "slow");
 }
 
