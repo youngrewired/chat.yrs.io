@@ -5,6 +5,7 @@
   "dependencies": {
     "badwords-list": "^1.0.0",
     "express": "4.10.2",
-    "socket.io": "1.2.0"
+    "socket.io": "1.2.0",
+    "firebase": "2.2.7"
   }
 }

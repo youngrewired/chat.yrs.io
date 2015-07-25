@@ -1,3 +1,3 @@
 # Young Rewired State Chat
 
-![ruby-eyes](ruby-eyes.gif)
+![ruby-eyes](assets/images/ruby-eyes.gif)

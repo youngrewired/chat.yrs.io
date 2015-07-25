@@ -78,6 +78,10 @@ body {
   transform: translateY(-50%);
 }
 
+.twitter {
+  display: none;
+}
+
 header {
   height: 300px;
   width: 100%;
@@ -187,6 +191,8 @@ form button {
   padding: 10px;
   border-bottom: 1px solid #efefef;
   color: #000000;
+  overflow: auto;
+	width: 100%
 }
 
 #messages li:last-child {
@@ -198,15 +204,8 @@ form button {
   color: #e34f50;
 }
 
-#messages li .twitter-link {
-  font-weight: 600;
-  text-decoration: none;
-}
-
 #messages li .message {
-  display: inline;
-  position: relative;
-  top: -10px;
+  display: inline-block;
 }
 
 #messages li .profileImage {
@@ -216,6 +215,27 @@ form button {
   -moz-border-radius: 3px;
   -webkit-border-radius: 3px;
   margin-right: 10px;
+}
+
+#messages li .twitter-link {
+  font-weight: 600;
+  text-decoration: none;
+  font-size: 10pt;
+}
+
+#messages li .label {
+  background-color: #EEEEEE;
+  color: #e34f50;
+  margin: 0px 0px 0px 5px;
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  font-size: 9pt;
+  padding: 2px 6px;
+}
+
+#messages li .msg {
+  display: block;
 }
 
 #messages li:nth-child(4n-3) .twitter-link {
@@ -237,8 +257,12 @@ form button {
 #messages .bot-msg {
   margin: 10px;
   padding: 20px 10px;
-  background-color: #D9D7DA;
+  background-color: #E0E0E0;
   border-radius: 5px;
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
+}
+
+#messages .server-msg {
+  color: red;
 }
