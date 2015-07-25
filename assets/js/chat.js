@@ -20,10 +20,10 @@ function showMessage(msg, user, tags, imageLink) {
 
   var messageElement;
   if (user == 'RubyBot') {
-    messageElement = $('<li class="bot-msg">').html('<a href="http://yrs.io">' + user + '</a>' + ': ' + msg);
+    messageElement = $('<li class="bot-msg">').html('<a href="http://yrs.io" target="_blank">' + user + '</a>' + ': ' + msg);
 
   } else if (user == 'Server') {
-    messageElement = $('<li class="server-msg">').html('<a href="http://yrs.io">' + user + '</a>' + ': ' + msg);
+    messageElement = $('<li class="server-msg">').html('<a href="http://yrs.io" target="_blank">' + user + '</a>' + ': ' + msg);
 
   } else {
 
