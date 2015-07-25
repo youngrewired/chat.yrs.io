@@ -15,15 +15,19 @@ var data = fs.readFileSync("config.json", "utf8", function(err, data) {
 var config = JSON.parse(data);
 
 var ref = new Firebase(config.firebase_url);
-var users = ref.child("users");
 
-function getUser(id, username, tags, image) {
-	// this is a dud function right now, should be replaced when possible
+users = {};
+
+function User(username, imageLink) {
 	return {
 		name: username,
-		tags: tags,
-		image: image
+		image: imageLink,
+		tags: ""
 	}
+}
+
+function getUser(token) {
+	return users[token];
 }
 
 function escapeHTML(string) {
@@ -44,19 +48,33 @@ app.get("/chat.js", function(req, res) {
 
 
 io.on('connection', function(socket){
-	socket.on("user join", function(token){
+	socket.on("user join", function(token, username, imageLink){
+		if (token == config.rubytoken){
+			if (!users[token]){
+				users[token] = User(escapeHTML(username), escapeHTML(imageLink));
+			}
+		}
 		ref.authWithCustomToken(token, function(error, data){
 			if (error) {
 				console.log(error)
+			} else {
+				if (!users[token]){
+					users[token] = User(escapeHTML(username), escapeHTML(imageLink));
+				}
+				socket.emit("user join", users[token])
 			}
 		});
+
 	});
 
 	socket.on("user leave", function(token){
-
+		socket.emit("user leave", users[token])
 	});
 
-	socket.on('chat message', function(msg, user, imageLink, fn){
+	socket.on('chat message', function(msg, token, fn){
+		var userObj = getUser(token);
+		if (!userObj) return;
+
 		if(msg == '' || msg == undefined || msg == null) {
 			fn({
 				status: "failed",
@@ -64,7 +82,6 @@ io.on('connection', function(socket){
 			})
 		}
 
-		var userObj = getUser(0, user, "", imageLink);
 		if (/B/.test(userObj.tags)){
 			fn({
 				status: "failed",
@@ -80,7 +97,7 @@ io.on('connection', function(socket){
 			banned.forEach(function(word) {
 				if(wordInString(msg, word)) {
 					allowed = false;
-					bannedWord = word
+					bannedWord = word;
 				}
 			});
 		});
@@ -94,14 +111,6 @@ io.on('connection', function(socket){
 		}
 
 		msg = escapeHTML(msg);
-		user = escapeHTML(user);
-		imageLink = escapeHTML(imageLink);
-
-		userObj = {
-			name: user,
-			tags: "",
-			image: imageLink
-		};
 
 		io.emit('chat message', msg, userObj);
 

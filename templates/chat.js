@@ -57,7 +57,7 @@ ref.onAuth(function(data) {
   if (!data){
     $('.twitter').css("display", "block")
   } else {
-    socket.emit("user join", data.token);
+    socket.emit("user join", data.token, data.twitter.username, data.twitter.profileImageURL);
   }
 });
 
@@ -80,9 +80,8 @@ $('form').submit(function(){
   } else {
     socket.emit('chat message',
       msgbox.val(),
-      authData.twitter.username,
-      authData.twitter.profileImageURL
-    , function(response) {
+      authData.token,
+      function(response) {
         if (response.status == "failed"){
           showMessage(response.message, "Server", "S", "");
         }
@@ -96,14 +95,29 @@ $('form').submit(function(){
 });
 
 
-
 socket.on('chat message', function(message, user) {
   showMessage(message, user.name, user.tags, user.image);
 });
 
 
-window.onbeforeunload = function(e) {
-  return 'Closing YRS Chat means you will no longer receive messages';
-};
+socket.on("user join", function(user) {
+  showMessage(user.name + " has joined!", "Server")
+});
 
+
+socket.on("user leave", function(user) {
+  showMessage(user.name + " has left.", "Server")
+});
+
+
+//window.onbeforeunload = function(e) {
+//  var result = confirm('Closing YRS Chat means you will no longer receive messages. Are you sure you want to close YRS Chat?');
+//  console.log(result);
+//  console.log(e);
+//  return result
+//};
+
+$(window).unload(function() {
+  socket.emit("user leave", token);
+})
 });
