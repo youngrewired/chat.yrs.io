@@ -118,7 +118,7 @@ function banUser(name, by, callback) {
 		});
 		return;
 	}
-
+	
 	if (userObj.banned){
 		callback({
 			status: "failed",
@@ -164,6 +164,14 @@ function unbanUser(name, callback) {
 		callback({
 			status: "failed",
 			message: "No user found called " + name + "."
+		});
+		return;
+	}
+
+	if (!userObj.banned){
+		callback({
+			status: "failed",
+			message: name + " is already unbanned."
 		});
 		return;
 	}
@@ -240,6 +248,7 @@ io.on('connection', function(socket){
 				}
 
 				//notify others that someone has joined
+				getUser(token).lastPing = time();
 				io.emit("user join", usersByToken[token]);
 			}
 		});
