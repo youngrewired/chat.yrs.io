@@ -183,9 +183,6 @@ io.on('connection', function(socket){
 
 		msg = marked(msg);
 
-		console.log(userObj.name);
-		console.log(bannedList);
-		bannedList.forEach(console.log);
 
 		if (bannedList.indexOf(userObj.name) !== -1){
 			fn({
