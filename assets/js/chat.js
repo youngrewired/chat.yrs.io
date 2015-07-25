@@ -19,11 +19,18 @@ $('.helpButton').click(function() {
 function updateTitle() {
   var title = $(document).prop('title'); 
   if (unreadMessages){
-    title.prepend("*");
+    $(title).prepend("*");
   }else{
-    title =  title.substring(1);
+    if (title.charAt(0) == "*") {
+      title =  title.substring(1);
+    }
   }
 }
+
+window.onfocus = function() {
+  unreadMessages = false;
+  updateTitle();
+};
 
 function showMessage(msg, user, tags, imageLink) {
   msg = emojione.toImage(msg);
