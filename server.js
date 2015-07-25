@@ -159,7 +159,7 @@ io.on('connection', function(socket){
 		if(m[0] == '!ban') {
 			ban(msg, m, fn, userObj);
 		} else if (m[0] == '!unban') {
-			unban(msg, m, fn, userObj);
+			unban(msg, m, fn, userObj, socket);
 		}
 
 		var allowed = true;
@@ -206,8 +206,6 @@ io.on('connection', function(socket){
 		//	}
 		//});
 
-
-
 		io.emit('chat message', msg, userObj);
 
 		fn({
@@ -229,21 +227,33 @@ function ban(msg, m, fn, userObj) {
 			'by': userObj
 		});
 		bannedList.push(m[1]);
+		io.emit('chat message', m[1] + ' has now been banned.', userObj);
 	}
 }
-
-function unban(msg, m, fn, userObj) {
-	if(m.length == 1 || m.length > 2) {
-		fn({
-			status: "failed",
-			message: '!unban [user CaSe SeNsItIvE]'
-		});
-	} else if (m.length == 2) {
-		db.bans.remove({
-			'user': m[1]
-		});
-		bannedList.splice(bannedList.indexOf(m[1]), 1);
+	
+function unban(msg, m, fn, userObj, socket) {
+	function work() {
+			if(m.length == 1 || m.length > 2) {
+				fn({
+					status: "failed",
+					message: "!unban [user CaSe SeNsItIvE]"
+				});
+			} else if (m.length == 2) {
+				db.bans.remove({
+					'user': m[1]
+				});
+				bannedList.splice(bannedList.indexOf(m[1]), 1);
+				io.emit('chat message', m[1] + ' has now been unbanned.', userObj);
+			}
 	}
+	
+	db.ranks.find({
+		'people': userObj.name
+	}, function(err, docs){
+		if(docs[0]) {
+			work();
+		}
+	});
 }
 
 function wordInString(s, word){
