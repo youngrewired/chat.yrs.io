@@ -168,7 +168,7 @@ window.setInterval(function() {
 
 
 $(window).unload(function() {
-  socket.emit("user leave", token);
+  socket.emit("user leave", authData.token);
 })
 });
 
