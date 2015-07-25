@@ -109,6 +109,9 @@ socket.on("user leave", function(user) {
   showMessage(user.name + " has left.", "Server")
 });
 
+window.setInterval(function() {
+  socket.emit("user ping", authData.token)
+}, 5000);
 
 
 $(window).unload(function() {
@@ -118,4 +121,6 @@ $(window).unload(function() {
 
 window.onbeforeunload = function(){
     return "Closing the window will disconnect your from YRS Chat";
-}
+};
+
+
