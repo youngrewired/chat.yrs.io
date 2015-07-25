@@ -62,6 +62,7 @@ window.onfocus = function() {
 
 function showMessage(msg, user, tags, imageLink, colour) {
   msg = emojione.toImage(msg);
+  var doAppend = true;
 
   var messageElement;
   if (user == 'RubyBot') {
@@ -72,7 +73,9 @@ function showMessage(msg, user, tags, imageLink, colour) {
 
   } else {
     if (user == lastUser) {
-      messageElement = $('#messages li').last().find(".message").add("<p class='msg'>" + msg + "</p>")
+      messageElement = $('#messages li').last();
+      messageElement.find(".message").append("<p class='msg'>" + msg + "</p>");
+      doAppend = false;
     } else if (!imageLink || imageLink == ''){
       messageElement = $('<li>').html(
         '<a href="https://twitter.com/'+ user +'" target="_blank"></a>' +
@@ -96,7 +99,9 @@ function showMessage(msg, user, tags, imageLink, colour) {
     target: "_blank"
   });
 
-  $('#messages').append(messageElement).animate({scrollTop: 1000000}, "slow");
+  if (doAppend){
+    $('#messages').append(messageElement).animate({scrollTop: 1000000}, "slow");
+  }
 
   if (document.hasFocus() == false){
     unreadMessages = true;
