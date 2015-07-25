@@ -251,7 +251,7 @@ form button {
 
 .label-Dev{
   background-color: #4E8F09;
-  color: white;
+  color: #fff !important;
 }
 
 #messages li .msg {
