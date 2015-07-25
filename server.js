@@ -1,13 +1,16 @@
 var express = require('express');
 var app = express();
+
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var fs = require('fs');
-app.use(express.static(__dirname));
 var list = require('badwords-list');
 var Firebase = require("firebase");
 var mongojs = require('mongojs');
-var db = mongojs('mongodb://localhost:27017/yrs', ['admins', 'ranks', 'bans']);
+
+
+app.use(express.static(__dirname));
+var db = mongojs('mongodb://46.101.35.180:27017/yrs', ['admins', 'ranks', 'bans']);
 var bannedList = [];
 
 var marked = require('marked');
@@ -146,14 +149,13 @@ io.on('connection', function(socket){
 			})
 			return;
 		}
-
-		var allowed = true;
-		var bannedWord;
 		var m = msg.split(' ');
 		if(m[0] == '!ban') {
 			ban(msg, m, fn, userObj);
 		}
 
+		var allowed = true;
+		var bannedWord;
 		m.forEach(function(msg) {
 			banned.forEach(function(word) {
 				if(wordInString(msg, word)) {
@@ -175,21 +177,33 @@ io.on('connection', function(socket){
 
 		msg = marked(msg);
 
-		var b = false;
-		bannedList.forEach(function(data){
-			if(data == userObj.name) {
-				fn({
-					status: "failed",
-					message: "You have been banned from posting messages."
-				});
-				b = true;
-				return;
-			}
-		});
+		console.log(userObj.name);
+		console.log(bannedList);
+		bannedList.forEach(console.log);
 
-		if(b == false){
-			io.emit('chat message', msg, userObj);
+		if (bannedList.indexOf(userObj.name) !== -1){
+			fn({
+				status: "failed",
+				message: "You have been banned from posting messages."
+			});
+			return;
 		}
+
+		//var b = false;
+		//bannedList.forEach(function(data){
+		//	if(data == userObj.name) {
+		//		fn({
+		//			status: "failed",
+		//			message: "You have been banned from posting messages."
+		//		});
+		//		b = true;
+		//		return;
+		//	}
+		//});
+
+
+
+		io.emit('chat message', msg, userObj);
 
 		fn({
 			status: "success"
