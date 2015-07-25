@@ -80,6 +80,7 @@ io.on('connection', function(socket){
 			if (!users[token]){
 				users[token] = User(token, escapeHTML(username), escapeHTML(imageLink));
 			}
+			io.emit("user join", users[token])
 		}
 		ref.authWithCustomToken(token, function(error, data){
 			if (error) {
