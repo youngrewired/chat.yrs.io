@@ -10,7 +10,7 @@ var Firebase = require("firebase");
 var marked = require('marked');
 marked.setOptions({
   renderer: new marked.Renderer(),
-  gfm: false,
+  gfm: true,
   tables: false,
   breaks: false,
   pedantic: false,
