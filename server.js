@@ -27,7 +27,7 @@ var data = fs.readFileSync("config.json", "utf8", function(err, data) {
 var config = JSON.parse(data);
 
 var ref = new Firebase(config.firebase_url);
-console.log(config.firebase_url)
+console.log(config.firebase_url);
 users = {};
 
 function User(username, imageLink) {
@@ -74,13 +74,13 @@ io.on('connection', function(socket){
 				if (!users[token]){
 					users[token] = User(escapeHTML(username), escapeHTML(imageLink));
 				}
-				socket.emit("user join", users[token])
+				io.emit("user join", users[token])
 			}
 		});
 	});
 
 	socket.on("user leave", function(token){
-		socket.emit("user leave", users[token])
+		io.emit("user leave", users[token])
 	});
 
 	socket.on('chat message', function(msg, token, fn){
