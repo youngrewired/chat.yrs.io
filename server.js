@@ -29,16 +29,29 @@ var config = JSON.parse(data);
 var ref = new Firebase(config.firebase_url);
 users = {};
 
-function User(username, imageLink) {
+function User(token, username, imageLink) {
 	return {
+		token: token,
 		name: username,
 		image: imageLink,
-		tags: "YRSer"
+		tags: "YRSer",
+		lastPing: time(),
+		online: true
 	}
 }
 
 function getUser(token) {
 	return users[token];
+}
+
+function getSafeUser(token) {
+	var user = users[token];
+	return {name: user.name, image: user.image, tags: user.tags}
+}
+
+function time() {
+	var d = new Date();
+	return d.getTime() / 1000;
 }
 
 function escapeHTML(string) {
@@ -63,7 +76,7 @@ io.on('connection', function(socket){
 		if (!token) return;
 		if (token == config.rubytoken){
 			if (!users[token]){
-				users[token] = User(escapeHTML(username), escapeHTML(imageLink));
+				users[token] = User(token, escapeHTML(username), escapeHTML(imageLink));
 			}
 		}
 		ref.authWithCustomToken(token, function(error, data){
@@ -71,7 +84,9 @@ io.on('connection', function(socket){
 				console.log(error)
 			} else {
 				if (!users[token]){
-					users[token] = User(escapeHTML(username), escapeHTML(imageLink));
+					users[token] = User(token, escapeHTML(username), escapeHTML(imageLink));
+				} else {
+					getUser(token).online = true
 				}
 				io.emit("user join", users[token])
 			}
@@ -79,11 +94,17 @@ io.on('connection', function(socket){
 	});
 
 	socket.on("user leave", function(token){
-		io.emit("user leave", users[token])
+		io.emit("user leave", getSafeUser(token));
+		getUser(token).online = false
+	});
+
+	socket.on("user ping", function(token) {
+		getUser(token).lastPing = time();
 	});
 
 	socket.on('chat message', function(msg, token, fn){
-		var userObj = getUser(token);
+		getUser(token).lastPing = time();
+		var userObj = getSafeUser(token);
 		if (!userObj) return;
 
 		if(msg == '' || msg == undefined || msg == null) {
@@ -137,6 +158,17 @@ function wordInString(s, word){
 	return new RegExp( '\\b' + word + '\\b', 'i').test(s);
 }
 
+function checkPings() {
+	for (var token in users){
+		var user = getUser(token);
+		if (user.online && user.lastPing < time()-config.timeout) {
+			io.emit("user leave", user);
+			user.online = false;
+		}
+	}
+}
+
 http.listen(config.port, function(){
     console.log('listening on Port ' + config.port);
+	  setInterval(checkPings, 5000)
 });
