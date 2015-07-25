@@ -6,6 +6,8 @@ var fs = require('fs');
 app.use(express.static(__dirname));
 var list = require('badwords-list');
 var Firebase = require("firebase");
+var mongojs = require('mongojs');
+var db = mongojs('mongodb://localhost:27017/yrs', ['admins', 'ranks', 'bans']);
 
 var marked = require('marked');
 marked.setOptions({
@@ -30,14 +32,14 @@ var ref = new Firebase(config.firebase_url);
 users = {};
 
 function User(token, username, imageLink) {
-	return {
-		token: token,
-		name: username,
-		image: imageLink,
-		tags: "YRSer",
-		lastPing: time(),
-		online: true
-	}
+		return {
+			token: token,
+			name: username,
+			image: imageLink,
+			tags: '',
+			lastPing: time(),
+			online: true
+		}
 }
 
 function getUser(token) {
@@ -47,7 +49,7 @@ function getUser(token) {
 function getSafeUser(token) {
 	var user = users[token];
 	if (user){
-	return {name: user.name, image: user.image, tags: user.tags}
+		return {name: user.name, image: user.image, tags: user.tags}
 	}
 }
 
@@ -89,6 +91,18 @@ io.on('connection', function(socket){
 			} else {
 				if (!users[token]){
 					users[token] = User(token, escapeHTML(username), escapeHTML(imageLink));
+					var tag;
+					db.ranks.find({
+						'people': escapeHTML(username)
+					}, function(err, docs) {
+						var tag;
+						if(docs[0]) {
+							tag = docs[0].rank
+						} else {
+							tag = 'YRSer'
+						}
+						users[token].tags = tag;
+					});
 				} else {
 					getUser(token).online = true
 				}
