@@ -46,30 +46,30 @@ body {
   font-family: 'Open Sans'
 }
 
-#about h1 {
+.about h1 {
   margin-bottom: 10px;
   display: inline;
   text-transform: uppercase;
 }
 
-#about .close-button {
+.about .close-button {
   float: right;
   font-size: 28pt;
   cursor: pointer;
   margin-top: -10px;
 }
 
-#about h4 {
+.about h4 {
   margin: 20px 0px 5px;
 }
 
-#about a {
+.about a {
   color: #e34f50;
   text-decoration: none;
   font-weight: 600;
 }
 
-#about ul li {
+.about ul li {
   list-style: none;
 }
 
