@@ -37,6 +37,8 @@ var colours = JSON.parse(colourdata);
 
 var ref = new Firebase(config.firebase_url);
 
+var adminTags = ["Dev", "Ambassador", "Staff"];
+
 var usersByToken = {};
 var usersByName = {};
 
@@ -101,7 +103,7 @@ app.get("/chat.js", function(req, res) {
 });
 
 function banUser(name, by, callback) {
-	var userObj = getUserByName(name);
+	var userObj = getUserByName(name.replace("@", ""));
 	if (!userObj){
 		callback({
 			status: "failed",
@@ -142,7 +144,7 @@ function banUser(name, by, callback) {
 }
 
 function unbanUser(name, callback) {
-	var userObj = getUserByName(name);
+	var userObj = getUserByName(name.replace("@", ""));
 	if (!userObj){
 		callback({
 			status: "failed",
@@ -257,14 +259,15 @@ io.on('connection', function(socket){
 
 		// commands section
 		var args = msg.split(" ");
-		if(args[0] == '/ban') {
-			banUser(args.slice(1), userObj.name, fn);
-			return;
-		} else if (args[0] == '/unban') {
-			unbanUser(args.slice(1), fn);
-			return;
+		if (adminTags.indexOf(userObj.tags) != -1){
+			if(args[0] == '/ban') {
+				banUser(args[1], userObj.name, fn);
+				return;
+			} else if (args[0] == '/unban') {
+				unbanUser(args[1], fn);
+				return;
+			}
 		}
-
 		var allowed = true;
 		var bannedWord;
 		args.forEach(function(msg) {
