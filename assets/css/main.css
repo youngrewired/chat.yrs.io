@@ -194,7 +194,7 @@ form button {
   border-bottom: 1px solid #efefef;
   color: #000000;
   overflow: auto;
-	width: 100%
+	width: calc(100% - 20px)
 }
 
 #messages li:last-child {
@@ -217,6 +217,7 @@ form button {
   -moz-border-radius: 3px;
   -webkit-border-radius: 3px;
   margin-right: 10px;
+  float: left;
 }
 
 #messages li .twitter-link {
@@ -235,29 +236,34 @@ form button {
   padding: 2px 6px;
 }
 
-.label-YRSer{
+.label-YRSer {
+  background-color: #e34f50;
+  color: #ffffff;
+}
+
+.label-Staff {
   background-color: #EEEEEE;
+  color: #e34f50;
 }
 
-.label-Staff{
-  background-color: #D56159;
+.label-Lead {
+  background-color: #7EC7E3;
+  color: #ffffff;
 }
 
-.label-Lead{
-  background-color: #8BC6E1;
+.label-Mentor {
+  background-color: #AD196F;
+  color: #ffffff;
 }
 
-.label-Mentor{
-  background-color: #8BC6E1;
+.label-Dev {
+  background-color: #FF5722;
+  color: #ffffff;
 }
 
-.label-Dev{
-  background-color: #4E8F09;
-  color: #fff !important;
-}
-
-.label-Ambassador{
-  background-color: #FFD700;
+.label-Ambassador {
+  background-color: #F9CD1D;
+  color: #000000;
 }
 
 #messages li .msg {
