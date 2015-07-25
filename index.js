@@ -6,6 +6,7 @@ var fs = require('fs');
 app.use(express.static(__dirname));
 var list = require('badwords-list');
 var Firebase = require("firebase");
+
 banned = list.array;
 
 var data = fs.readFileSync("config.json", "utf8", function(err, data) {
@@ -14,6 +15,20 @@ var data = fs.readFileSync("config.json", "utf8", function(err, data) {
 var config = JSON.parse(data);
 
 var ref = new Firebase(config.firebase_url);
+var users = ref.child("users");
+
+function getUser(id, username, tags, image) {
+	// this is a dud function right now, should be replaced when possible
+	return {
+		name: username,
+		tags: tags,
+		image: image
+	}
+}
+
+function escapeHTML(string) {
+	return string.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
 
 app.get('/', function(req, res) {
 	res.sendFile("./index.html");
@@ -30,44 +45,69 @@ app.get("/chat.js", function(req, res) {
 
 io.on('connection', function(socket){
 	socket.on("user join", function(token){
-		var auth = ref.authWithCustomToken(token, function(error, data){
-			if (error){
-				return
+		ref.authWithCustomToken(token, function(error, data){
+			if (error) {
+				console.log(error)
 			}
 		});
-
 	});
 
 	socket.on("user leave", function(token){
 
 	});
 
-	socket.on('chat message', function(msg, user, imageLink){
+	socket.on('chat message', function(msg, user, imageLink, fn){
 		if(msg == '' || msg == undefined || msg == null) {
+			fn({
+				status: "failed",
+				message: "There was no message"
+			})
+		}
+
+		var userObj = getUser(0, user, "", imageLink);
+		if (/B/.test(userObj.tags)){
+			fn({
+				status: "failed",
+				message: "You have been banned from posting messages."
+			});
 			return;
 		}
 
 		var allowed = true;
+		var bannedWord;
 		var m = msg.split(' ');
 		m.forEach(function(msg) {
 			banned.forEach(function(word) {
 				if(wordInString(msg, word)) {
 					allowed = false;
+					bannedWord = word
 				}
 			});
 		});
 
-		if(allowed == false) {
-			return;
+		if(!allowed) {
+			fn({
+				status: "failed",
+				message: "Your message contained the banned word '" + bannedWord + "'."
+			});
+			return 0;
 		}
 
-		msg = msg.replace(/</g, "&lt;");
-		msg = msg.replace(/>/g, "&gt;");
+		msg = escapeHTML(msg);
+		user = escapeHTML(user);
+		imageLink = escapeHTML(imageLink);
 
-		user = user.replace(/</g, "&lt;");
-		user = user.replace(/>/g, "&gt;");
+		userObj = {
+			name: user,
+			tags: "",
+			image: imageLink
+		};
 
-		io.emit('chat message', msg, user, imageLink);
+		io.emit('chat message', msg, userObj);
+
+		fn({
+			status: "success"
+		});
 	});
 });
 

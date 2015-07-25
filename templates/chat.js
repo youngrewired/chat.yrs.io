@@ -15,7 +15,7 @@ $('.helpButton').click(function() {
   })
 });
 
-function showMessage(msg, user, imageLink) {
+function showMessage(msg, user, tags, imageLink) {
   msg = emojione.toImage(msg);
 
   var messageElement;
@@ -28,11 +28,20 @@ function showMessage(msg, user, imageLink) {
   } else {
 
     if (!imageLink || imageLink == ''){
-      messageElement = $('<li>').html('<a href="https://twitter.com/'+ user +'" target="_blank"></a><div class="message"><a class="twitter-link" href="https://twitter.com/'+ user +'" target="_blank">@' + user + '</a>' + ': ' + msg + '</div>');
+      messageElement = $('<li>').html(
+        '<a href="https://twitter.com/'+ user +'" target="_blank"></a>' +
+        '<div class="message">' +
+        '<a class="twitter-link" href="https://twitter.com/'+ user +'" target="_blank">[' + tags + ']@' + user + '</a>' +
+        ': ' + msg + '</div>'
+      );
     } else {
-      messageElement = $('<li>').html('<a href="https://twitter.com/'+ user +'" target="_blank"><img class="profileImage" src="' + imageLink + '"/></a><div class="message"><a class="twitter-link" href="https://twitter.com/'+ user +'" target="_blank">@' + user + '</a>' + ': ' + msg + '</div>');
+      messageElement = $('<li>').html(
+        '<a href="https://twitter.com/'+ user +'" target="_blank"><img class="profileImage" src="' + imageLink + '"/></a>' +
+        '<div class="message">' +
+        '<a class="twitter-link" href="https://twitter.com/'+ user +'" target="_blank">[' + tags + ']@' + user + '</a>' +
+        ': ' + msg + '</div>'
+      );
     }
-
   }
 
   $('#messages').append(messageElement).animate({scrollTop: 1000000}, "slow");
@@ -45,7 +54,11 @@ function showMessage(msg, user, imageLink) {
 // firebase stuff
 ref.onAuth(function(data) {
   authData = data;
-  socket.emit("join", data.token);
+  if (!data){
+    $('.twitter').css("display", "block")
+  } else {
+    socket.emit("user join", data.token);
+  }
 });
 
 $('#twitter-button').click(function() {
@@ -61,7 +74,6 @@ $('#twitter-button').click(function() {
 
 ref.getAuth();
 
-
 $('form').submit(function(){
   if(canPost == false){
     showMessage('Please do not spam!', 'Server', '');
@@ -70,6 +82,11 @@ $('form').submit(function(){
       msgbox.val(),
       authData.twitter.username,
       authData.twitter.profileImageURL
+    , function(response) {
+        if (response.status == "failed"){
+          showMessage(response.message, "Server", "S", "");
+        }
+      }
     );
     canPost=false;
     setTimeout(function(){canPost=true},500);
@@ -79,7 +96,11 @@ $('form').submit(function(){
 });
 
 
-socket.on('chat message', showMessage);
+
+socket.on('chat message', function(message, user) {
+  showMessage(message, user.name, user.tags, user.image);
+});
+
 
 window.onbeforeunload = function(e) {
   return 'Closing YRS Chat means you will no longer receive messages';
