@@ -13,17 +13,17 @@ app.use(express.static(__dirname));
 var db = mongojs('mongodb://localhost:27017/yrs', ['admins', 'ranks', 'bans']);
 var bannedList = [];
 
-var marked = require('marked');
-marked.setOptions({
-  renderer: new marked.Renderer(),
-  gfm: true,
-  tables: false,
-  breaks: false,
-  pedantic: false,
-  sanitize: false,
-  smartLists: false,
-  smartypants: false
-});
+//var marked = require('marked');
+// marked.setOptions({
+//   renderer: new marked.Renderer(),
+//   gfm: true,
+//   tables: false,
+//   breaks: false,
+//   pedantic: false,
+//   sanitize: false,
+//   smartLists: false,
+//   smartypants: false
+// });
 
 banned = list.array;
 
@@ -181,7 +181,7 @@ io.on('connection', function(socket){
 
 		msg = escapeHTML(msg);
 
-		msg = marked(msg);
+		//msg = marked(msg);
 
 
 		if (bannedList.indexOf(userObj.name) !== -1){
