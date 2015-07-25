@@ -49,6 +49,7 @@ app.get("/chat.js", function(req, res) {
 
 io.on('connection', function(socket){
 	socket.on("user join", function(token, username, imageLink){
+		if (!token) return;
 		if (token == config.rubytoken){
 			if (!users[token]){
 				users[token] = User(escapeHTML(username), escapeHTML(imageLink));
@@ -64,7 +65,6 @@ io.on('connection', function(socket){
 				socket.emit("user join", users[token])
 			}
 		});
-
 	});
 
 	socket.on("user leave", function(token){
