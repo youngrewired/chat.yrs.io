@@ -115,6 +115,8 @@ io.on('connection', function(socket){
 		if (!userObj) return;
 		getUser(token).lastPing = time();
 
+		if (!fn){fn = function(){}}
+
 		if(msg == '' || msg == undefined || msg == null) {
 			fn({
 				status: "failed",
