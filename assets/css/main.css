@@ -255,6 +255,10 @@ form button {
   color: #fff !important;
 }
 
+.label-Ambassador{
+  background-color: #FFD700;
+}
+
 #messages li .msg {
   display: block;
 }
