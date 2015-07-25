@@ -110,14 +110,15 @@ socket.on("user leave", function(user) {
 });
 
 
+
+$(window).unload(function() {
+  socket.emit("user leave", token);
+})
+});
+
 window.onbeforeunload = function(e) {
   var result = confirm('Closing YRS Chat means you will no longer receive messages. Are you sure you want to close YRS Chat?');
   console.log(result);
   console.log(e);
   return result
 };
-
-$(window).unload(function() {
-  socket.emit("user leave", token);
-})
-});
