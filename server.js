@@ -10,7 +10,7 @@ var mongojs = require('mongojs');
 
 
 app.use(express.static(__dirname));
-var db = mongojs('mongodb://46.101.35.180:27017/yrs', ['admins', 'ranks', 'bans']);
+var db = mongojs('mongodb://localhost:27017/yrs', ['admins', 'ranks', 'bans']);
 var bannedList = [];
 
 var marked = require('marked');
