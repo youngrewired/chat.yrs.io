@@ -8,10 +8,10 @@ var list = require('badwords-list');
 var Firebase = require("firebase");
 var mongojs = require('mongojs');
 
+banned = list.array;
 
 app.use(express.static(__dirname));
 var db = mongojs('mongodb://localhost:27017/yrs', ['admins', 'ranks', 'bans']);
-var bannedList = [];
 
 //var marked = require('marked');
 // marked.setOptions({
@@ -25,8 +25,6 @@ var bannedList = [];
 //   smartypants: false
 // });
 
-banned = list.array;
-
 var configdata = fs.readFileSync("config.json", "utf8", function(err, data) {
 	if (err) throw err;
 });
@@ -34,11 +32,13 @@ var config = JSON.parse(configdata);
 
 var colourdata = fs.readFileSync("colours.json", "utf8", function(err, data) {
 	if (err) throw err;
-})
+});
 var colours = JSON.parse(colourdata);
 
 var ref = new Firebase(config.firebase_url);
-users = {};
+
+var usersByToken = {};
+var usersByName = {};
 
 function User(token, username, imageLink) {
 		return {
@@ -48,16 +48,32 @@ function User(token, username, imageLink) {
 			tags: '',
 			lastPing: time(),
 			online: true,
+			banned: false,
 			colour: colours[Math.floor(Math.random()*colours.length)]
 		}
 }
 
+function newUser(token, username, imageLink) {
+	var userObj = User(token, username, imageLink);
+	usersByToken[token] = userObj;
+	usersByName[username] = userObj;
+	return userObj
+}
+
+// set server user...
+var ServerUser = User("", "Server", "");
+
+
 function getUser(token) {
-	return users[token];
+	return usersByToken[token];
+}
+
+function getUserByName(name) {
+	return usersByName[name]
 }
 
 function getSafeUser(token) {
-	var user = users[token];
+	var user = usersByToken[token];
 	if (user){
 		return {name: user.name, image: user.image, tags: user.tags, colour: user.colour}
 	}
@@ -84,87 +100,174 @@ app.get("/chat.js", function(req, res) {
 	res.send(page)
 });
 
+function banUser(name, by, callback) {
+	var userObj = getUserByName(name);
+	if (!userObj){
+		callback({
+			status: "failed",
+			message: "No user found called " + name + "."
+		});
+		return;
+	}
+
+	if (userObj.banned){
+		callback({
+			status: "failed",
+			message: name + " is already banned."
+		});
+		return;
+	}
+
+	userObj.banned = true;
+	db.bans.insert({
+		user: name,
+		time: Date.now(),
+		by: by
+	}, function(err, data){
+		if (err) {
+			console.log(err);
+
+			callback({
+				status: "failed",
+				message: "An unknown error occurred."
+			})
+		}	else {
+			callback({
+				status: "success",
+				message: name + " has been banned."
+			});
+			say(name + " has been banned.")
+		}
+	})
+}
+
+function unbanUser(name, callback) {
+	var userObj = getUserByName(name);
+	if (!userObj){
+		callback({
+			status: "failed",
+			message: "No user found called " + name + "."
+		});
+		return;
+	}
+
+	userObj.banned = false;
+	db.bans.remove({
+		user: name
+	}, function(err, data){
+		if (err) {
+			console.log(err);
+			callback({
+				status: "failed",
+				message: "An unknown error occurred."
+			})
+		} else {
+			callback({
+				status: "success",
+				message: name + " has been unbanned."
+			})
+		}
+		console.log("test");
+		say(name + " has been unbanned.");
+	})
+}
+
+function say(message){
+	io.emit("chat message", message, ServerUser)
+}
 
 io.on('connection', function(socket){
 	socket.on("user join", function(token, username, imageLink){
+		username = escapeHTML(username);
+		imageLink = escapeHTML(imageLink);
+
 		if (!token) return;
 		if (token == config.rubytoken){
-			if (!users[token]){
-				users[token] = User(token, escapeHTML(username), escapeHTML(imageLink));
+			if (!usersByToken[token]){
+				usersByToken[token] = newUser(token, username, imageLink);
 			}
-			io.emit("user join", users[token]);
+			io.emit("user join", usersByToken[token]);
 			return;
 		}
+
 		ref.authWithCustomToken(token, function(error, data){
 			if (error) {
 				console.log(error)
 			} else {
-				if (!users[token]){
+				if (!usersByToken[token]) {
+					// create userObj
+					var userObj = newUser(token, username, imageLink);
+
+					// set ban flag
 					db.bans.find({
-						'user': escapeHTML(username)
+						'user': username
 					}, function(err, docs) {
-						if(docs[0]) {
-							bannedList.push(escapeHTML(username));
-						}
+						if (docs[0]) userObj.banned = true;
 					});
-					users[token] = User(token, escapeHTML(username), escapeHTML(imageLink));
-					var tag;
+
+					// set tag
 					db.ranks.find({
-						'people': escapeHTML(username)
+						'people': username
 					}, function(err, docs) {
-						var tag;
 						if(docs[0]) {
-							tag = docs[0].rank
+							userObj.tags = docs[0].rank;
 						} else {
-							tag = 'YRSer'
+							userObj.tags = 'YRSer';
 						}
-						users[token].tags = tag;
 					});
+
+					usersByToken[token] = userObj;
+
 				} else {
-					getUser(token).online = true
+					getUser(token).online = true;
 				}
-				io.emit("user join", users[token])
+
+				//notify others that someone has joined
+				io.emit("user join", usersByToken[token]);
 			}
 		});
 	});
 
 	socket.on("user leave", function(token){
+		if (!getUser(token)) return;
 		io.emit("user leave", getSafeUser(token));
 		getUser(token).online = false
 	});
 
 	socket.on("user ping", function(token) {
-		try{
+		if (!getUser(token)) return;
 		getUser(token).lastPing = time();
-		} catch(err) {
-			console.log(err)
-		}
+
 	});
 
 	socket.on('chat message', function(msg, token, fn){
-		var userObj = getSafeUser(token);
+		var userObj = getUser(token);
 		if (!userObj) return;
 		getUser(token).lastPing = time();
 
-		if (!fn){fn = function(){}}
+		if (!fn){fn = function(){}} // fix for RubyBot which has no way of sending functions
 
 		if(msg == '' || msg == undefined || msg == null) {
 			fn({
 				status: "failed",
 				message: "There was no message"
-			})
+			});
 			return;
 		}
-		var m = msg.split(' ');
-		if(m[0] == '!ban') {
-			ban(msg, m, fn, userObj);
-		} else if (m[0] == '!unban') {
-			unban(msg, m, fn, userObj);
+
+		// commands section
+		var args = msg.split(" ");
+		if(args[0] == '/ban') {
+			banUser(args.slice(1), userObj.name, fn);
+			return;
+		} else if (args[0] == '/unban') {
+			unbanUser(args.slice(1), fn);
+			return;
 		}
 
 		var allowed = true;
 		var bannedWord;
-		m.forEach(function(msg) {
+		args.forEach(function(msg) {
 			banned.forEach(function(word) {
 				if(wordInString(msg, word)) {
 					allowed = false;
@@ -185,8 +288,8 @@ io.on('connection', function(socket){
 
 		//msg = marked(msg);
 
-
-		if (bannedList.indexOf(userObj.name) !== -1){
+		// if user is banned, tell them
+		if (userObj.banned){
 			fn({
 				status: "failed",
 				message: "You have been banned from posting messages."
@@ -194,21 +297,7 @@ io.on('connection', function(socket){
 			return;
 		}
 
-		//var b = false;
-		//bannedList.forEach(function(data){
-		//	if(data == userObj.name) {
-		//		fn({
-		//			status: "failed",
-		//			message: "You have been banned from posting messages."
-		//		});
-		//		b = true;
-		//		return;
-		//	}
-		//});
-
-
-
-		io.emit('chat message', msg, userObj);
+		io.emit('chat message', msg, getSafeUser(token));
 
 		fn({
 			status: "success"
@@ -216,42 +305,12 @@ io.on('connection', function(socket){
 	});
 });
 
-function ban(msg, m, fn, userObj) {
-	if(m.length == 1 || m.length > 2) {
-		fn({
-			status: "failed",
-			message: "!ban [username CaSe SeNsItIvE]"
-		});
-	} else if (m.length == 2) {
-		db.bans.insert({
-			'user': m[1],
-			'time': Date.now(),
-			'by': userObj
-		});
-		bannedList.push(m[1]);
-	}
-}
-
-function unban(msg, m, fn, userObj) {
-	if(m.length == 1 || m.length > 2) {
-		fn({
-			status: "failed",
-			message: '!unban [user CaSe SeNsItIvE]'
-		});
-	} else if (m.length == 2) {
-		db.bans.remove({
-			'user': m[1]
-		});
-		bannedList.splice(bannedList.indexOf(m[1]), 1);
-	}
-}
-
 function wordInString(s, word){
 	return new RegExp( '\\b' + word + '\\b', 'i').test(s);
 }
 
 function checkPings() {
-	for (var token in users){
+	for (var token in usersByToken){
 		var user = getUser(token);
 		if (user.online && user.lastPing < time()-config.timeout) {
 			io.emit("user leave", user);
