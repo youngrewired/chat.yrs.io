@@ -158,6 +158,8 @@ io.on('connection', function(socket){
 		var m = msg.split(' ');
 		if(m[0] == '!ban') {
 			ban(msg, m, fn, userObj);
+		} else if (m[0] == '!unban') {
+			unban(msg, m, fn, userObj);
 		}
 
 		var allowed = true;
@@ -215,10 +217,10 @@ io.on('connection', function(socket){
 });
 
 function ban(msg, m, fn, userObj) {
-	if(m.length == 1) {
+	if(m.length == 1 || m.length > 2) {
 		fn({
 			status: "failed",
-			message: "!ban [user]"
+			message: "!ban [username CaSe SeNsItIvE]"
 		});
 	} else if (m.length == 2) {
 		db.bans.insert({
@@ -227,6 +229,20 @@ function ban(msg, m, fn, userObj) {
 			'by': userObj
 		});
 		bannedList.push(m[1]);
+	}
+}
+
+function unban(msg, m, fn, userObj) {
+	if(m.length == 1 || m.length > 2) {
+		fn({
+			status: "failed",
+			message: '!unban [user CaSe SeNsItIvE]'
+		});
+	} else if (m.length == 2) {
+		db.bans.remove({
+			'user': m[1]
+		});
+		bannedList.splice(bannedList.index(m[1]), 1);
 	}
 }
 
