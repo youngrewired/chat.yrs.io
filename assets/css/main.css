@@ -224,7 +224,6 @@ form button {
 }
 
 #messages li .label {
-  background-color: #EEEEEE;
   color: #e34f50;
   margin: 0px 0px 0px 5px;
   border-radius: 3px;
@@ -232,6 +231,26 @@ form button {
   -webkit-border-radius: 3px;
   font-size: 9pt;
   padding: 2px 6px;
+}
+
+.label-YRSer{
+  background-color: #EEEEEE;
+}
+
+.label-Staff{
+  background-color: #D56159;
+}
+
+.label-Lead{
+  background-color: #8BC6E1;
+}
+
+.label-Mentor{
+  background-color: #8BC6E1;
+}
+
+.label-Dev{
+  background-color: #4E8F09;
 }
 
 #messages li .msg {
