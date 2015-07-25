@@ -7,6 +7,18 @@ app.use(express.static(__dirname));
 var list = require('badwords-list');
 var Firebase = require("firebase");
 
+var marked = require('marked');
+marked.setOptions({
+  renderer: new marked.Renderer(),
+  gfm: false,
+  tables: false,
+  breaks: false,
+  pedantic: false,
+  sanitize: false,
+  smartLists: false,
+  smartypants: false
+});
+
 banned = list.array;
 
 var data = fs.readFileSync("config.json", "utf8", function(err, data) {
@@ -111,6 +123,8 @@ io.on('connection', function(socket){
 		}
 
 		msg = escapeHTML(msg);
+
+		msg = marked(msg);
 
 		io.emit('chat message', msg, userObj);
 
