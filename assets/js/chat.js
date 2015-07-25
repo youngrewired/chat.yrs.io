@@ -47,6 +47,11 @@ function showMessage(msg, user, tags, imageLink) {
     target: "_blank"
   });
   $('#messages').append(messageElement).animate({scrollTop: 1000000}, "slow");
+
+  if (document.hasFocus() == false){
+    var audio = new Audio('/assets/sound/pop.ogg');
+    audio.play();
+  }
 }
 
 
