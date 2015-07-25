@@ -4,6 +4,7 @@ var ref = new Firebase("***firebase-url***");
 var socket = io();
 var canPost = true;
 var authData;
+var lastUser;
 var unreadMessages =  false;
 var soundEnabledText = "Sound on";
 var soundDisabledText = "Sound off";
@@ -17,7 +18,6 @@ $('.helpButton').click(function() {
     });
   })
 });
-
 
 function updateSoundPrefButton(){
   // Check localstorage
@@ -45,7 +45,7 @@ function toggleSoundPref(){
 
 
 function updateTitle() {
-  var title = $(document).prop('title'); 
+  var title = $(document).prop('title');
   if (unreadMessages){
     $(title).prepend("*");
   }else{
@@ -62,6 +62,7 @@ window.onfocus = function() {
 
 function showMessage(msg, user, tags, imageLink, colour) {
   msg = emojione.toImage(msg);
+  var doAppend = true;
 
   var messageElement;
   if (user == 'RubyBot') {
@@ -71,8 +72,11 @@ function showMessage(msg, user, tags, imageLink, colour) {
     messageElement = $('<li class="server-msg">').html('<a href="http://yrs.io" target="_blank">' + user + '</a>' + ': ' + msg);
 
   } else {
-
-    if (!imageLink || imageLink == ''){
+    if (user == lastUser) {
+      messageElement = $('#messages li').last();
+      messageElement.find(".message").append("<p class='msg'>" + msg + "</p>");
+      doAppend = false;
+    } else if (!imageLink || imageLink == ''){
       messageElement = $('<li>').html(
         '<a href="https://twitter.com/'+ user +'" target="_blank"></a>' +
         '<div class="message">' +
@@ -87,13 +91,17 @@ function showMessage(msg, user, tags, imageLink, colour) {
         '<p class="msg">' + msg + '</p></div>'
       );
     }
+
+    lastUser = user
   }
-  
+
   messageElement.linkify({
     target: "_blank"
   });
 
-  $('#messages').append(messageElement).animate({scrollTop: 1000000}, "slow");
+  if (doAppend){
+    $('#messages').append(messageElement).animate({scrollTop: 1000000}, "slow");
+  }
 
   if (document.hasFocus() == false){
     unreadMessages = true;
@@ -177,5 +185,3 @@ $(window).unload(function() {
 window.onbeforeunload = function(){
     return "Closing the window will disconnect your from YRS Chat";
 };
-
-
