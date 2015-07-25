@@ -136,6 +136,7 @@ io.on('connection', function(socket){
 				status: "failed",
 				message: "There was no message"
 			})
+			return;
 		}
 
 		if (/B/.test(userObj.tags)){
