@@ -4,6 +4,7 @@ var ref = new Firebase("***firebase-url***");
 var socket = io();
 var canPost = true;
 var authData;
+var unreadMessages =  false;
 
 var msgbox = $("#message");
 
@@ -14,6 +15,15 @@ $('.helpButton').click(function() {
     });
   })
 });
+
+function updateTitle() {
+  var title = $(document).prop('title'); 
+  if (unreadMessages){
+    title.prepend("*");
+  }else{
+    title =  title.substring(1);
+  }
+}
 
 function showMessage(msg, user, tags, imageLink) {
   msg = emojione.toImage(msg);
@@ -49,6 +59,8 @@ function showMessage(msg, user, tags, imageLink) {
   $('#messages').append(messageElement).animate({scrollTop: 1000000}, "slow");
 
   if (document.hasFocus() == false){
+    unreadMessages = true;
+    updateTitle();
     var audio = new Audio('/assets/sound/pop.ogg');
     audio.play();
   }
