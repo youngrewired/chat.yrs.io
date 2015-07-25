@@ -18,6 +18,8 @@ $('.helpButton').click(function() {
 function showMessage(msg, user, tags, imageLink) {
   msg = emojione.toImage(msg);
 
+  msg = linkifyString(msg);
+
   var messageElement;
   if (user == 'RubyBot') {
     messageElement = $('<li class="bot-msg">').html('<a href="http://yrs.io" target="_blank">' + user + '</a>' + ': ' + msg);
@@ -45,9 +47,6 @@ function showMessage(msg, user, tags, imageLink) {
   }
 
   $('#messages').append(messageElement).animate({scrollTop: 1000000}, "slow");
-  $('li').linkify({
-    target: "_blank"
-  });
 }
 
 
