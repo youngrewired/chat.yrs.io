@@ -5,6 +5,8 @@ var socket = io();
 var canPost = true;
 var authData;
 var unreadMessages =  false;
+var soundEnabledText = "Sound on"
+var soundDisabledTest = "Sound off"
 
 var msgbox = $("#message");
 
@@ -15,6 +17,35 @@ $('.helpButton').click(function() {
     });
   })
 });
+
+
+function updateSoundPrefButton(){
+  // Check localstorage
+  if (localStorage.getItem("soundPref") === null){
+    localStorage.setItem("soundPref", true)
+  }else if (localStorage.getItem("soundPref") == "true"){
+    document.getElementById("soundPref").innerHTML = soundEnabledText;
+  }else{
+    document.getElementById("soundPref").innerHTML = soundDisabledTest;
+  }
+
+    console.log(localStorage.getItem("soundPref"))
+}
+
+$(document).ready(function(){
+  updateSoundPrefButton();
+});
+
+
+function toggleSoundPref(){
+  if (localStorage.getItem("soundPref") == "true"){
+    localStorage.getItem("soundPref") == "false"
+  }else{
+    localStorage.getItem("soundPref") == "true"
+  }
+  updateSoundPrefButton()
+}
+
 
 function updateTitle() {
   var title = $(document).prop('title'); 

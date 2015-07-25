@@ -100,7 +100,8 @@ header .head-content {
 }
 
 .head-content .backButton,
-.head-content .helpButton {
+.head-content .helpButton,
+.head-content .prefsButton {
   padding: 10px 20px;
   margin-right: 10px;
   border-radius: 5px;
