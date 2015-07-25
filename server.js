@@ -27,10 +27,15 @@ marked.setOptions({
 
 banned = list.array;
 
-var data = fs.readFileSync("config.json", "utf8", function(err, data) {
+var configdata = fs.readFileSync("config.json", "utf8", function(err, data) {
 	if (err) throw err;
 });
-var config = JSON.parse(data);
+var config = JSON.parse(configdata);
+
+var colourdata = fs.readFileSync("colours.json", "utf8", function(err, data) {
+	if (err) throw err;
+})
+var colours = JSON.parse(colourdata);
 
 var ref = new Firebase(config.firebase_url);
 users = {};
@@ -42,7 +47,8 @@ function User(token, username, imageLink) {
 			image: imageLink,
 			tags: '',
 			lastPing: time(),
-			online: true
+			online: true,
+			colour: colours[Math.floor(Math.random()*colours.length)]
 		}
 }
 
@@ -53,7 +59,7 @@ function getUser(token) {
 function getSafeUser(token) {
 	var user = users[token];
 	if (user){
-		return {name: user.name, image: user.image, tags: user.tags}
+		return {name: user.name, image: user.image, tags: user.tags, colour: user.colour}
 	}
 }
 
