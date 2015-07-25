@@ -31,15 +31,15 @@ function showMessage(msg, user, tags, imageLink) {
       messageElement = $('<li>').html(
         '<a href="https://twitter.com/'+ user +'" target="_blank"></a>' +
         '<div class="message">' +
-        '<a class="twitter-link" href="https://twitter.com/'+ user +'" target="_blank">[' + tags + ']@' + user + '</a>' +
+        '<a class="twitter-link" href="https://twitter.com/'+ user +'" target="_blank">@' + user + '</a><span class="label">' + tags + '</span>' +
         ': ' + msg + '</div>'
       );
     } else {
       messageElement = $('<li>').html(
         '<a href="https://twitter.com/'+ user +'" target="_blank"><img class="profileImage" src="' + imageLink + '"/></a>' +
         '<div class="message">' +
-        '<a class="twitter-link" href="https://twitter.com/'+ user +'" target="_blank">[' + tags + ']@' + user + '</a>' +
-        ': ' + msg + '</div>'
+        '<a class="twitter-link" href="https://twitter.com/'+ user +'" target="_blank">@' + user + '</a><span class="label">' + tags + '</span>' +
+        '<p class="msg">' + msg + '</p></div>'
       );
     }
   }

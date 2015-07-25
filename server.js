@@ -15,14 +15,14 @@ var data = fs.readFileSync("config.json", "utf8", function(err, data) {
 var config = JSON.parse(data);
 
 var ref = new Firebase(config.firebase_url);
-
+console.log(config.firebase_url)
 users = {};
 
 function User(username, imageLink) {
 	return {
 		name: username,
 		image: imageLink,
-		tags: ""
+		tags: "YRSer"
 	}
 }
 
@@ -39,7 +39,7 @@ app.get('/', function(req, res) {
 });
 
 app.get("/chat.js", function(req, res) {
-	var page = fs.readFileSync("./templates/chat.js", "utf8", function(err, data) {
+	var page = fs.readFileSync("./assets/js/chat.js", "utf8", function(err, data) {
 		if (err) throw err;
 	});
 	page = page.replace("***firebase-url***", config.firebase_url);
