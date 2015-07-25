@@ -35,7 +35,7 @@ updateSoundPrefButton();
 $("#soundPref").click(toggleSoundPref);
 
 function toggleSoundPref(){
-  if (localStorage.getItem("soundPref") == 1){
+  if (localStorage.getItem("soundPref") == "1"){
     localStorage.setItem("soundPref", 0);
   } else {
     localStorage.setItem("soundPref", 1);
@@ -99,8 +99,10 @@ function showMessage(msg, user, tags, imageLink, colour) {
   if (document.hasFocus() == false){
     unreadMessages = true;
     updateTitle();
-    var audio = new Audio('/assets/sound/pop.ogg');
-    audio.play();
+    if (localStorage.getItem("soundPref") == "1"){
+      var audio = new Audio('/assets/sound/pop.ogg');
+      audio.play();
+    }
   }
 }
 
