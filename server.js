@@ -103,6 +103,7 @@ app.get("/chat.js", function(req, res) {
 });
 
 function banUser(name, by, callback) {
+	if (!name) return;
 	var userObj = getUserByName(name.replace("@", ""));
 	if (!userObj){
 		callback({
@@ -144,6 +145,7 @@ function banUser(name, by, callback) {
 }
 
 function unbanUser(name, callback) {
+	if (!name) return;
 	var userObj = getUserByName(name.replace("@", ""));
 	if (!userObj){
 		callback({
