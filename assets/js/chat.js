@@ -32,7 +32,7 @@ function updateSoundPrefButton(){
     console.log(localStorage.getItem("soundPref"))
 }
 
-$(window).ready(function(){
+$(document).ready(function(){
   updateSoundPrefButton();
 });
 
