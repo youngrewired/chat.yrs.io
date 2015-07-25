@@ -242,7 +242,7 @@ function unban(msg, m, fn, userObj) {
 		db.bans.remove({
 			'user': m[1]
 		});
-		bannedList.splice(bannedList.index(m[1]), 1);
+		bannedList.splice(bannedList.indexOf(m[1]), 1);
 	}
 }
 
