@@ -18,7 +18,7 @@ $('.helpButton').click(function() {
 function showMessage(msg, user, tags, imageLink) {
   msg = emojione.toImage(msg);
 
-  msg = linkifyString(msg);
+  msg = linkifyStr(msg);
 
   var messageElement;
   if (user == 'RubyBot') {
