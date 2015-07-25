@@ -28,10 +28,9 @@ function updateSoundPrefButton(){
   }else{
     document.getElementById("soundPref").innerHTML = soundDisabledText;
   }
-    console.log(localStorage.getItem("soundPref"))
 }
 updateSoundPrefButton();
-  
+
 $("#soundPref").click(toggleSoundPref);
 
 function toggleSoundPref(){
