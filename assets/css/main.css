@@ -263,22 +263,6 @@ form button {
   display: block;
 }
 
-#messages li:nth-child(4n-3) .twitter-link {
-  color: #e34f50;
-}
-
-#messages li:nth-child(4n-2) .twitter-link {
-  color: #7EC7E3;
-}
-
-#messages li:nth-child(4n-1) .twitter-link {
-  color: #AD196F;
-}
-
-#messages li:nth-child(4n) .twitter-link {
-  color: #F9CD1D;
-}
-
 #messages .bot-msg {
   margin: 10px;
   padding: 20px 10px;
