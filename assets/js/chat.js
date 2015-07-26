@@ -8,6 +8,7 @@ var lastUser;
 var unreadMessages =  false;
 var soundEnabledText = "Sound enabled";
 var soundDisabledText = "Mentions Only";
+var lostConnection = false;
 
 var msgbox = $("#message");
 
@@ -94,7 +95,7 @@ function showMessage(msg, user, tags, imageLink, colour) {
 
 
   }
-  lastUser = user
+  lastUser = user;
   messageElement.linkify({
     target: "_blank"
   });
@@ -150,7 +151,7 @@ $('form').submit(function(){
       authData.token,
       function(response) {
         if (response.status == "failed"){
-          showMessage(response.message, "Server", "S", "");
+          showMessage(response.message, "Server", "", "");
         }
       }
     );
@@ -161,6 +162,18 @@ $('form').submit(function(){
   return false;
 });
 
+socket.on("connect", function(){
+  if (!authData) return;
+  if (!lostConnection) return;
+  showMessage("You have reconnected to the server.", "Server");
+  socket.emit("user join", authData.token, authData.twitter.username, authData.twitter.profileImageURL);
+  lostConnection = false;
+});
+
+socket.on("disconnect", function(){
+  showMessage("You have been temporarlly disconnected from the server.", "Server");
+  lostConnection = true;
+});
 
 socket.on('chat message', function(message, user) {
   showMessage(message, user.name, user.tags, user.image, user.colour);
