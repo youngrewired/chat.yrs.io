@@ -128,7 +128,7 @@ function getUsers(socket){
   socket.emit("get users", authData.token, function(users){
     $('#userlist').empty();
     users.data.forEach(function(user){
-      $('#userlist').append("<li style='color:" + user.color +"'>@"+user.name+"</li>");
+      $('#userlist').append("<li style='color:" + user.colour +"'>@"+user.name+"</li>");
     });
   });
 }
