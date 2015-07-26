@@ -99,9 +99,7 @@ function showMessage(msg, user, tags, imageLink, colour) {
     target: "_blank"
   });
 
-  if (doAppend){
-    $('#messages').append(messageElement).animate({scrollTop: 1000000}, "slow");
-  }
+  $('#messages').append(messageElement).animate({scrollTop: 1000000}, "slow");
 
   if (document.hasFocus() == false){
     unreadMessages = true;
