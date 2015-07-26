@@ -167,12 +167,13 @@ function showMessage(message, user){
   messageElement.html(messageElement.html()+
     '<div class="message">' +
     '<a style="color: ' + user.colour + ';" class="twitter-link" href="https://twitter.com/'+ user.name +'" target="_blank">' + '@' + user.name + '</a>' +
-    '<span class="label label-' + user.tags + '">' + user.tags + '</span><span class="label">' + formatTimestamp(message.timestamp) + '</span>'
+    '<span class="label label-' + user.tags + '">' + user.tags + '</span><span class="label">' + formatTimestamp(message.timestamp) + '</span>' +
+    '<p class="' + msgClass + '">' + message.text + '</p>'
   );
 
   if(canTweet){
     messageElement.html(messageElement.html() + '<a href="https://twitter.com/share" ' +
-      'class="twitter-share-button" ' +
+      'class="twitter-share-button" style="display: float; float: right;"' +
       'data-url="http://chat.yrs.io" ' +
       'data-text="' + message.text + '" ' +
       'data-via="YRSChat" ' +
@@ -180,14 +181,35 @@ function showMessage(message, user){
       'Tweet</a>')
   }
 
-  messageElement.html(messageElement.html() + '<p class="' + msgClass + '">' + message.text + '</p></div>');
+  lastUser = user.name;
+  messageElement.linkify({
+    target: "_blank"
+  });
+
+  messageElement.html(messageElement.html() + '</div>');
 
   $('#messages').append(messageElement).animate({scrollTop: 1000000}, "slow");
 
   if(canTweet){
     twttr.widgets.load()
   }
+
+  if (!document.hasFocus()){
+    unreadMessages = true;
+    updateTitle();
+    var nameFormatted = authData.twitter.username;
+    if (msg.toLowerCase().indexOf(nameFormatted.toLowerCase()) !== -1){
+        var audio = new Audio('/assets/sound/Ding.mp3');
+        audio.play();
+    }else{
+      if (localStorage.getItem("soundPref") == "1"){
+        var audio = new Audio('/assets/sound/pop.ogg');
+        audio.play();
+      }
+    }
+  }
 }
+
 
 
 // firebase stuff
