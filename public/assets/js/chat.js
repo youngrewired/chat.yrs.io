@@ -133,7 +133,8 @@ function showMessage(message, user){
       messageElement.html(messageElement.html() + '<a href="https://twitter.com/share" ' +
         'class="twitter-share-button"' +
         'data-url="http://chat.yrs.io" ' +
-        'data-text="' + message.text + ' // Join the conversation at" ' +
+        'data-text="' + message.text + '" ' +
+        'data-via="YRSChat" ' +
         'data-count="none">' +
         'Tweet</a>'
       )
@@ -147,7 +148,7 @@ function showMessage(message, user){
       messageElement.find(".message").append(
         "<p class='msg'>" + message.text + "</p>" +
         '<a href="https://twitter.com/share" ' +
-        'class="twitter-share-button" style="display: float; float: right;"' +
+        'class="twitter-share-button"' +
         'data-url="http://chat.yrs.io" ' +
         'data-text="' + message.text + '" ' +
         'data-via="YRSChat" ' +
