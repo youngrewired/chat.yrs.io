@@ -292,6 +292,11 @@ function setRank(user, rank, by, callback) {
 	)
 }
 
+function deleteMessage(timestamp){
+	if(!timestamp) return;
+	io.emit("delete message", timestamp)
+}
+
 io.on('connection', function(socket){
 	socket.on("user join", function(token, username, imageLink){
 		if (!token) return;
@@ -384,8 +389,10 @@ io.on('connection', function(socket){
 				unbanUser(args[1], fn);
 				return;
 			} else if (args[0] == "/setrank") {
-				console.log("test");
-				setRank(args[1], args[2], userObj, fn)
+				setRank(args[1], args[2], userObj, fn);
+				return;
+			} else if (args[0] == "/delete") {
+				deleteMessage(args[1]);
 				return;
 			}
 		}
