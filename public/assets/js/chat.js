@@ -131,6 +131,7 @@ function showMessage(message, user){
         'class="twitter-share-button"' +
         'data-url="http://chat.yrs.io" ' +
         'data-text="' + message.text + '" ' +
+        'data-hashtags="FOC2015" ' +
         'data-via="YRSChat" ' +
         'data-count="none">' +
         'Tweet</a>' + '</div>';
