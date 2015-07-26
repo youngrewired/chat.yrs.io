@@ -142,6 +142,15 @@ function SayAsServer(message){
   showMessage({text: message, timestamp: Date.now()}, ServerUser)
 }
 
+function getUsers(socket){
+  socket.emit("get users", authData.token, function(users){
+    $('#userlist').empty();
+    users.data.forEach(function(user){
+      $('#userlist').append("<li style='color:" + user.colour +"'>@"+user.name+"</li>");
+    });
+  });
+}
+
 function showMessage(message, user){
   message.text = emojione.toImage(message.text);
 
@@ -303,15 +312,18 @@ socket.on('chat message', function(message, user) {
 
 socket.on("user join", function(user) {
   SayAsServer(user.name + " has joined!")
+  getUsers(socket);
 });
 
 
 socket.on("user leave", function(user) {
   SayAsServer(user.name + " has left.")
+  getUsers(socket);
 });
 
 window.setInterval(function() {
   socket.emit("user ping", authData.token)
+  getUsers(socket);
 }, 5000);
 
 
