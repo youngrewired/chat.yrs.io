@@ -190,10 +190,9 @@ function showMessage(message, user){
 
     if(canTweet){
       messageElement.html(messageElement.html() + '<a href="https://twitter.com/share" ' +
-        'class="twitter-share-button" style="display: float; float: right;"' +
+        'class="twitter-share-button"' +
         'data-url="http://chat.yrs.io" ' +
-        'data-text="' + message.text + '" ' +
-        'data-via="YRSChat" ' +
+        'data-text="' + message.text + ' // Join the conversation at" ' +
         'data-count="none">' +
         'Tweet</a>'
       )
@@ -223,7 +222,7 @@ function showMessage(message, user){
   });
 
   $('#messages').append(messageElement).animate({scrollTop: 1000000}, "slow");
-  
+
 
   if(canTweet){
     twttr.widgets.load()
