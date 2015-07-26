@@ -126,7 +126,7 @@ function showMessage(msg, user, tags, imageLink, colour) {
 }
 
 function getUsers(socket){
-  socket.emit("get users", token, function(users){
+  socket.emit("get users", authData.token, function(users){
     users.forEach(function(user){
       console.log(user);
     });
