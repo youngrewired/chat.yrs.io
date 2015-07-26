@@ -6,8 +6,8 @@ var canPost = true;
 var authData;
 var lastUser;
 var unreadMessages =  false;
-var soundEnabledText = "Sound on";
-var soundDisabledText = "Sound off";
+var soundEnabledText = "Sound enabled";
+var soundDisabledText = "Mentions Only";
 
 var msgbox = $("#message");
 
@@ -106,10 +106,16 @@ function showMessage(msg, user, tags, imageLink, colour) {
   if (document.hasFocus() == false){
     unreadMessages = true;
     updateTitle();
-    if (localStorage.getItem("soundPref") == "1"){
-      var audio = new Audio('/assets/sound/pop.ogg');
-      audio.play();
-    }
+      if (msg.indexOf(@ + "user") >= 0){
+        var audio = new Audio('/assets/sound/Ding.mp3');
+        audio.play();
+      }
+      }else{
+        if (localStorage.getItem("soundPref") == "1"){
+          var audio = new Audio('/assets/sound/pop.ogg');
+          audio.play();
+        }
+      }
   }
 }
 
