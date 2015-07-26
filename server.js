@@ -91,6 +91,12 @@ function getSafeUser(token) {
 	}
 }
 
+function getSafeUserByName(name){
+	var user = getUserByName(name);
+	if (!user) return;
+	return {name: user.name, image: user.image, tags: user.tags, colour: user.colour}
+}
+
 function time() {
 	var d = new Date();
 	return d.getTime() / 1000;
@@ -200,7 +206,7 @@ function unbanUser(name, callback) {
 			callback({
 				status: "success",
 				message: name + " has been unbanned."
-			})
+			});
 			say(name + " has been unbanned.");
 		}
 	})
@@ -410,6 +416,26 @@ io.on('connection', function(socket){
 			status: "success"
 		});
 	});
+
+	socket.on("get users", function(token, callback) {
+		if (!getUser(token)) return;
+
+		var retUsers = [];
+
+		for (var name in usersByName){
+			var user = getUserByName(name);
+			if (user.online){
+				console.log(getSafeUserByName(name));
+				retUsers.push(getSafeUserByName(name));
+			}
+		}
+
+		callback({
+			status: "success",
+			data: retUsers
+		})
+
+	})
 });
 
 function wordInString(s, word){
