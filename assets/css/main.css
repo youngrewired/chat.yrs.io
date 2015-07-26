@@ -133,25 +133,21 @@ header .head-content {
   font-family: 'Open Sans';
   font-weight: 300;
   width: 100%;
-  padding-bottom: 60px; /*Temporary, needs refining*/
 }
 
 form {
   width: 100%;
   background-color: #e34f50;
-  height: 50px;
+  height: auto;
   position: fixed;
   bottom: 0;
   display: inline-block;
   text-align: center;
 }
 
-form .wrap {
-  margin-top: 7.5px;
-}
-
 form input {
   padding: 10px;
+  margin: 5px 0px;
   outline: none;
   border: none;
   width: 70%;
@@ -277,18 +273,27 @@ form button {
   white-space: nowrap;
 }
 
+#users h3 {
+  float: left;
+  font-weight: 300;
+  margin-left: 20px;
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
 #userlist {
   position: relative;
   top: 50%;
   transform: translateY(-50%);
-  padding: 0px 10px 0px 10px;
-  padding:10px;
+  padding: 10px;
+  float: left;
 }
 
 #userlist li {
   display: inline;
-  list-style-type: none;
-  padding-right: 20px;
+  list-style: none;
+  margin-right: 20px;
 }
 
 
@@ -296,7 +301,8 @@ form button {
 
 @media screen and (max-width: 900px) {
   form input {
-    width: calc(100% - 30px)
+    width: calc(100% - 30px);
+    font-size: 16pt;
   }
 
   form button {
