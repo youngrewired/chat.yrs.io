@@ -196,6 +196,13 @@ socket.on("user leave", function(user) {
   showMessage(user.name + " has left.", "Server")
 });
 
+socket.emit("get users", token, function(users){
+  var list = 
+  users.forEach(function(user){
+    console.log(user);
+  });
+});
+
 window.setInterval(function() {
   socket.emit("user ping", authData.token)
 }, 5000);
