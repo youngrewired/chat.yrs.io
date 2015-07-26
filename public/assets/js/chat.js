@@ -129,10 +129,10 @@ function formatTimestamp(timestamp) {
   var date = new Date(timestamp);
   var hours = date.getHours().toString();
   var minutes = date.getMinutes().toString();
-  if (hours.length == 0){
+  if (hours.length == 1){
     hours = "0" + hours
   }
-  if (minutes.length == 0){
+  if (minutes.length == 1){
     minutes = "0" + minutes
   }
   return hours + ":" + minutes
@@ -143,6 +143,8 @@ function SayAsServer(message){
 }
 
 function showMessage(message, user){
+  message.text = emojione.toImage(message.text);
+
   var msgClass = "msg";
   var hasImage = Boolean(user.image);
   var wasLastUser = lastUser == user.name;
@@ -158,27 +160,53 @@ function showMessage(message, user){
     wasLastUser = false;
     canTweet = false;
     href = "http://yrs.io";
+  } else if (user.name == "RubyBot") {
+    msgClass = "bot-msg";
+    canTweet = false;
+    href = "http://twitter.com/YRSChat"
   }
+
   var messageElement = $('<li>');
 
-  if (hasImage) {
-    messageElement.html('<a href="' + href + '" target="_blank"><img class="profileImage" src="' + user.image + '"/></a>')
-  }
-  messageElement.html(messageElement.html()+
-    '<div class="message">' +
-    '<a style="color: ' + user.colour + ';" class="twitter-link" href="https://twitter.com/'+ user.name +'" target="_blank">' + '@' + user.name + '</a>' +
-    '<span class="label label-' + user.tags + '">' + user.tags + '</span><span class="label">' + formatTimestamp(message.timestamp) + '</span>' +
-    '<p class="' + msgClass + '">' + message.text + '</p>'
-  );
+  if (!wasLastUser) {
+    if (hasImage) {
+      messageElement.html('<a href="' + href + '" target="_blank"><img class="profileImage" src="' + user.image + '"/></a>')
+    }
 
-  if(canTweet){
-    messageElement.html(messageElement.html() + '<a href="https://twitter.com/share" ' +
-      'class="twitter-share-button" style="display: float; float: right;"' +
-      'data-url="http://chat.yrs.io" ' +
-      'data-text="' + message.text + '" ' +
-      'data-via="YRSChat" ' +
-      'data-count="none">' +
-      'Tweet</a>')
+    messageElement.html(messageElement.html()+
+      '<div class="message">' +
+      '<a style="color: ' + user.colour + ';" class="twitter-link" href="https://twitter.com/'+ twitterUser +'" target="_blank">' + '@' + user.name + '</a>' +
+      '<span class="label label-' + user.tags + '">' + user.tags + '</span><span class="label">' + formatTimestamp(message.timestamp) + '</span>' +
+      '<p class="' + msgClass + '">' + message.text + '</p>'
+    );
+
+    if(canTweet){
+      messageElement.html(messageElement.html() + '<a href="https://twitter.com/share" ' +
+        'class="twitter-share-button" style="display: float; float: right;"' +
+        'data-url="http://chat.yrs.io" ' +
+        'data-text="' + message.text + '" ' +
+        'data-via="YRSChat" ' +
+        'data-count="none">' +
+        'Tweet</a>'
+      )
+    }
+
+    messageElement.html(messageElement.html() + '</div>');
+  } else {
+    messageElement = $('#messages li').last();
+
+    if (canTweet){
+      messageElement.find(".message").append(
+        "<p class='msg'>" + message.text + "</p>" +
+        '<a href="https://twitter.com/share" ' +
+        'class="twitter-share-button" style="display: float; float: right;"' +
+        'data-url="http://chat.yrs.io" ' +
+        'data-text="' + message.text + '" ' +
+        'data-via="YRSChat" ' +
+        'data-count="none">' +
+        'Tweet</a>'
+      );
+    }
   }
 
   lastUser = user.name;
@@ -186,9 +214,9 @@ function showMessage(message, user){
     target: "_blank"
   });
 
-  messageElement.html(messageElement.html() + '</div>');
-
-  $('#messages').append(messageElement).animate({scrollTop: 1000000}, "slow");
+  if (!wasLastUser){
+    $('#messages').append(messageElement).animate({scrollTop: 1000000}, "slow");
+  }
 
   if(canTweet){
     twttr.widgets.load()
@@ -198,7 +226,7 @@ function showMessage(message, user){
     unreadMessages = true;
     updateTitle();
     var nameFormatted = authData.twitter.username;
-    if (msg.toLowerCase().indexOf(nameFormatted.toLowerCase()) !== -1){
+    if (message.text.toLowerCase().indexOf(nameFormatted.toLowerCase()) !== -1){
         var audio = new Audio('/assets/sound/Ding.mp3');
         audio.play();
     }else{
