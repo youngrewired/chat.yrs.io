@@ -39,8 +39,9 @@ var ref = new Firebase(config.firebase_url);
 
 var adminTags = ["Dev", "Ambassador", "Staff"];
 
-var usersByToken = {};
-var usersByName = {};
+var tokenToName = {};
+//var usersByToken = {};
+var usersByName = {}
 
 function User(token, username, imageLink) {
 		return {
@@ -56,9 +57,13 @@ function User(token, username, imageLink) {
 }
 
 function newUser(token, username, imageLink) {
+	if (usersByName[username]) {
+		tokenToName[token] = username;
+		return usersByName[username];
+	}
 	var userObj = User(token, username, imageLink);
-	usersByToken[token] = userObj;
 	usersByName[username] = userObj;
+	tokenToName[token] = username;
 	return userObj
 }
 
@@ -67,7 +72,8 @@ var ServerUser = User("", "Server", "");
 
 
 function getUser(token) {
-	return usersByToken[token];
+	//return usersByToken[token];
+	return getUserByName(tokenToName[token]);
 }
 
 function getUserByName(name) {
@@ -75,7 +81,7 @@ function getUserByName(name) {
 }
 
 function getSafeUser(token) {
-	var user = usersByToken[token];
+	var user = getUser(token);
 	if (user){
 		return {name: user.name, image: user.image, tags: user.tags, colour: user.colour}
 	}
@@ -222,7 +228,7 @@ io.on('connection', function(socket){
 			if (error) {
 				console.log(error)
 			} else {
-				if (!usersByToken[token]) {
+				if (!getUser(token)) {
 					// create userObj
 					var userObj = newUser(token, username, imageLink);
 
@@ -243,8 +249,7 @@ io.on('connection', function(socket){
 							userObj.tags = 'Community';
 						}
 					});
-
-					usersByToken[token] = userObj;
+					//getUser(token) = userObj;
 
 				} else {
 					getUser(token).online = true;
@@ -252,7 +257,7 @@ io.on('connection', function(socket){
 
 				//notify others that someone has joined
 				getUser(token).lastPing = time();
-				io.emit("user join", usersByToken[token]);
+				io.emit("user join", getUser(token));
 			}
 		});
 	});
@@ -340,8 +345,8 @@ function wordInString(s, word){
 }
 
 function checkPings() {
-	for (var token in usersByToken){
-		var user = getUser(token);
+	for (var name in usersByName){
+		var user = getUserByName(name);
 		if (user.online && user.lastPing < time()-config.timeout) {
 			io.emit("user leave", user);
 			user.online = false;
