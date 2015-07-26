@@ -69,7 +69,7 @@ function showMessage(msg, user, tags, imageLink, colour) {
   var doAppend = true;
 
   var messageElement;
-  if (user == 'RubyBot') {
+  if (user == 'RubyBot' && lastUser != 'RubyBot') {
     messageElement = $('<li>').html(
       '<a href="https://twitter.com/YRSChat" target="_blank"><img class="profileImage" src="' + imageLink + '"/></a>' +
       '<div class="message">' +
