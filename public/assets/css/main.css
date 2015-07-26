@@ -224,7 +224,7 @@ form button {
 }
 
 #messages li .twitter-share-button {
-  display: inline !important;
+  display: block;
 }
 
 #messages li .label {
@@ -257,7 +257,7 @@ form button {
 }
 
 #messages li .msg {
-  display: inline;
+  display: block;
 }
 
 #messages .bot-msg {
