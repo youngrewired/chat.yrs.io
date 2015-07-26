@@ -37,7 +37,7 @@ body {
   width: calc(100% - 60px);
   margin: 10px;
   padding: 20px;
-  height: calc(100% - 60px);
+  max-height: calc(100% - 60px);
   overflow-y: scroll;
   border-radius: 8px;
   -moz-border-radius: 8px;
