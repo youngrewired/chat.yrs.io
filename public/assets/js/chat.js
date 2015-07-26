@@ -145,9 +145,10 @@ function showMessage(message, user){
     if (canTweet){
       messageElement.find(".message").append(
         '<a href="https://twitter.com/share" ' +
-        'class="twitter-share-button"' +
+        'class="twitter-share-button" ' +
         'data-url="http://chat.yrs.io" ' +
         'data-text="' + message.text + '" ' +
+        'data-hashtags="FOC2015" ' +
         'data-via="YRSChat" ' +
         'data-count="none">' +
         'Tweet</a>'
