@@ -320,6 +320,8 @@ socket.on("user leave", function(user) {
   getUsers(socket);
 });
 
+getUsers(socket);
+
 window.setInterval(function() {
   socket.emit("user ping", authData.token)
   getUsers(socket);
