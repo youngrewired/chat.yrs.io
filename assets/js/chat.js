@@ -46,12 +46,15 @@ function toggleSoundPref(){
 
 
 function updateTitle() {
-  var title = $(document).find("title").text();;
+  var title = $(document).find("title").text();
+  console.log(title);
   if (unreadMessages){
     $(title).prepend("*");
+    console.log('prepending')
   }else{
     if (title.charAt(0) == "*") {
       title =  title.substring(1);
+      console.log('removing');
     }
   }
 }
