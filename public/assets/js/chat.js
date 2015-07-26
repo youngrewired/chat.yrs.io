@@ -91,6 +91,17 @@ function getUsers(socket){
   });
 }
 
+function makeTweetButton(text){
+  text = text.replace(/<[^(img)][^>]*>|<img.+?alt="|"[^>]*>/g, "");
+  return '<a href="https://twitter.com/share" ' +
+    'class="twitter-share-button"' +
+    'data-url="http://chat.yrs.io" ' +
+    'data-text="' + text + ' // Join the conversation at" ' +
+    'data-hashtags="FoC2015" ' +
+    'data-count="none">' +
+    'Tweet</a>' + '</div>';
+}
+
 function showMessage(message, user){
   message.text = emojione.toImage(message.text);
 
@@ -127,13 +138,7 @@ function showMessage(message, user){
       '<p class="' + msgClass + '">' + message.text + '</p>';
 
     if(canTweet){
-      html += '<a href="https://twitter.com/share" ' +
-        'class="twitter-share-button"' +
-        'data-url="http://chat.yrs.io" ' +
-        'data-text="' + message.text + ' // Join the conversation at" ' +
-        'data-hashtags="FoC2015" ' +
-        'data-count="none">' +
-        'Tweet</a>' + '</div>';
+      html += makeTweetButton(message.text)
     } else {
       html += '</div>';
     }
@@ -143,15 +148,7 @@ function showMessage(message, user){
     messageElement.find(".message").append("<p class='msg'>" + message.text + "</p>");
 
     if (canTweet){
-      messageElement.find(".message").append(
-        '<a href="https://twitter.com/share" ' +
-        'class="twitter-share-button" ' +
-        'data-url="http://chat.yrs.io" ' +
-        'data-text="' + message.text + ' // Join the conversation at" ' +
-        'data-hashtags="FoC2015" ' +
-        'data-count="none">' +
-        'Tweet</a>'
-      );
+      messageElement.find(".message").append(makeTweetButton(message.text));
     }
   }
 
