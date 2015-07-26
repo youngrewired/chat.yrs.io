@@ -49,12 +49,12 @@ function updateTitle() {
   var title= $(document).find("title");
   console.log(title);
   if (unreadMessages){
-    title.text("*" + title.text())
-    console.log('prepending')
+    if (title.text().charAt(0) != "*" ){
+      title.text("* " + title.text())
+    }
   }else{
     if (title.text().charAt(0) == "*"){
-      title.text(title.text().substring(1));
-      console.log('removing');
+      title.text(title.text().substring(2));
     }
   }
 }
