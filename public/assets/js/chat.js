@@ -177,7 +177,7 @@ function showMessage(message, user){
     if (message.text.toLowerCase().indexOf(nameFormatted.toLowerCase()) !== -1){
         var audio = new Audio('/assets/sound/Ding.mp3');
         audio.play();
-    }else{
+    } else {
       if (localStorage.getItem("soundPref") == "1"){
         var audio = new Audio('/assets/sound/pop.ogg');
         audio.play();
@@ -191,7 +191,7 @@ function deleteMessage(timestamp){
   if (messageP.parent().find("p.msg").length == 1){
     messageP.parent().parent().remove();
     lastUser=null;
-  } else{
+  } else if (messageP.parent().find("p.msg").length !== 0){
     messageP.next().remove();
     messageP.remove();
   }
