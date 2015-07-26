@@ -222,9 +222,8 @@ function showMessage(message, user){
     target: "_blank"
   });
 
-  if (!wasLastUser){
-    $('#messages').append(messageElement).animate({scrollTop: 1000000}, "slow");
-  }
+  $('#messages').append(messageElement).animate({scrollTop: 1000000}, "slow");
+  
 
   if(canTweet){
     twttr.widgets.load()
