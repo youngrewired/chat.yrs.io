@@ -25,13 +25,12 @@ var db = mongojs('mongodb://localhost:27017/yrs', ['admins', 'ranks', 'bans']);
 //   smartypants: false
 // });
 
-
-var configdata = fs.readFileSync("config.json", "utf8", function(err, data) {
+var configdata = fs.readFileSync("../configs/config.json", "utf8", function(err, data) {
 	if (err) throw err;
 });
 var config = JSON.parse(configdata);
 
-var colourdata = fs.readFileSync("colours.json", "utf8", function(err, data) {
+var colourdata = fs.readFileSync("../configs/colours.json", "utf8", function(err, data) {
 	if (err) throw err;
 });
 var colours = JSON.parse(colourdata);
@@ -44,11 +43,22 @@ var validTags = ["Developer", "Ambassador", "Staff", "Community"];
 var tokenToName = {};
 
 var usersByName = {};
+var lastMessageId = 0;
+
+function Message(text) {
+	var escText = escapeHTML(text);
+
+	return {
+		text: escText,
+		timestamp: Date.now()
+	}
+}
 
 function User(token, username, imageLink) {
 		return {
 			token: token,
 			name: username,
+			nameLower: username.toLowerCase(),
 			image: imageLink,
 			tags: '',
 			lastPing: time(),
@@ -274,9 +284,9 @@ function setRank(user, rank, by, callback) {
 				userObj.tags = rank;
 				callback({
 					status: "success",
-					message: "'" + userObj.name + " is now a " + rank + "."
+					message: "'" + userObj.name + "'`t is now a " + rank + "."
 				});
-				say("'" + userObj.name + " is now a " + rank + ".")
+				say("'" + userObj.name + "' is now a " + rank + ".")
 			}
 		}
 	)
@@ -398,7 +408,7 @@ io.on('connection', function(socket){
 			return 0;
 		}
 
-		msg = escapeHTML(msg);
+		var message = Message(msg);
 
 		//msg = marked(msg);
 
@@ -411,7 +421,7 @@ io.on('connection', function(socket){
 			return;
 		}
 
-		io.emit('chat message', msg, getSafeUser(token));
+		io.emit('chat message', message, getSafeUser(token));
 
 		fn({
 			status: "success"
@@ -434,7 +444,6 @@ io.on('connection', function(socket){
 			status: "success",
 			data: retUsers
 		})
-
 	})
 });
 
