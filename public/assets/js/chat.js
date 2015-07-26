@@ -130,9 +130,8 @@ function showMessage(message, user){
       html += '<a href="https://twitter.com/share" ' +
         'class="twitter-share-button"' +
         'data-url="http://chat.yrs.io" ' +
-        'data-text="' + message.text + '" ' +
-        'data-hashtags="FOC2015" ' +
-        'data-via="YRSChat" ' +
+        'data-text="' + message.text + ' // Join the conversation at" ' +
+        'data-hashtags="FoC2015" ' +
         'data-count="none">' +
         'Tweet</a>' + '</div>';
     } else {
@@ -148,9 +147,8 @@ function showMessage(message, user){
         '<a href="https://twitter.com/share" ' +
         'class="twitter-share-button" ' +
         'data-url="http://chat.yrs.io" ' +
-        'data-text="' + message.text + '" ' +
-        'data-hashtags="FOC2015" ' +
-        'data-via="YRSChat" ' +
+        'data-text="' + message.text + ' // Join the conversation at" ' +
+        'data-hashtags="FoC2015" ' +
         'data-count="none">' +
         'Tweet</a>'
       );
