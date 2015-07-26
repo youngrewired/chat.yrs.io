@@ -25,6 +25,7 @@ var db = mongojs('mongodb://localhost:27017/yrs', ['admins', 'ranks', 'bans']);
 //   smartypants: false
 // });
 
+
 var configdata = fs.readFileSync("config.json", "utf8", function(err, data) {
 	if (err) throw err;
 });
