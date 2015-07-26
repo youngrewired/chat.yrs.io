@@ -244,18 +244,8 @@ form button {
   color: #e34f50;
 }
 
-.label-Lead {
-  background-color: #7EC7E3;
-  color: #ffffff;
-}
-
-.label-Mentor {
-  background-color: #AD196F;
-  color: #ffffff;
-}
-
 .label-Developer {
-  background-color: #FF5722;
+  background-color: #AD196F;
   color: #ffffff;
 }
 
