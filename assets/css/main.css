@@ -266,3 +266,13 @@ form button {
 #messages .server-msg a {
   color: #03A9F4;
 }
+
+#users{
+  height: 50px;
+}
+
+#userlist li {
+  display: inline;
+  list-style-type: none;
+  padding-right: 20px;
+}
