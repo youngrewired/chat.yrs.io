@@ -182,7 +182,7 @@ form button {
 
 #messages {
   list-style: none;
-  overflow-y: scroll;
+  overflow-y: auto;
   height: 100%;
   padding: 10px;
 }
@@ -273,7 +273,7 @@ form button {
   overflow:auto;
   overflow-y:hidden;
   width:auto;
-  overflow-x:scroll;
+  overflow-x:auto;
   white-space: nowrap;
 }
 
@@ -289,4 +289,21 @@ form button {
   display: inline;
   list-style-type: none;
   padding-right: 20px;
+}
+
+
+/* MOBILE */
+
+@media screen and (max-width: 900px) {
+  form input {
+    width: calc(100% - 30px)
+  }
+
+  form button {
+    display: none;
+  }
+
+  .prefsButton {
+    display: none;
+  }
 }
