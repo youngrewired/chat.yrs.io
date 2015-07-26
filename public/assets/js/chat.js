@@ -65,65 +65,6 @@ window.onfocus = function() {
   updateTitle();
 };
 
-//function showMessage(msg, user, tags, imageLink, colour) {
-//  msg = emojione.toImage(msg);
-//
-//  var messageElement;
-//  if (user == 'RubyBot' && lastUser != 'RubyBot') {
-//    messageElement = $('<li>').html(
-//      '<a href="https://twitter.com/YRSChat" target="_blank"><img class="profileImage" src="' + imageLink + '"/></a>' +
-//      '<div class="message">' +
-//      '<a style="color: ruby;" class="twitter-link" href="https://twitter.com/'+ user +'" target="_blank">@' + user + '</a><span class="label label-' + tags + '">' + tags + '</span>' +
-//      '<p class="bot-msg">' + msg + '</p></div>'
-//    );
-//
-//  } else if (user == 'Server') {
-//    messageElement = $('<li class="server-msg">').html('<a href="http://yrs.io" target="_blank">' + user + '</a>' + ': ' + msg);
-//
-//  } else {
-//    if (user == lastUser) {
-//      messageElement = $('#messages li').last();
-//      messageElement.find(".message").append("<p class='msg'>" + msg + "</p>");
-//    } else if (!imageLink || imageLink == ''){
-//      messageElement = $('<li>').html(
-//        '<a href="https://twitter.com/'+ user +'" target="_blank"></a>' +
-//        '<div class="message">' +
-//        '<a style="color: ' + colour + ';" class="twitter-link" href="https://twitter.com/'+ user +'" target="_blank">@' + user + '</a><span class="label label-' + tags + '">' + tags + '</span>' +
-//        '<p class="msg">' + msg + '</p></div>'
-//      );
-//    } else {
-//      messageElement = $('<li>').html(
-//        '<a href="https://twitter.com/'+ user +'" target="_blank"><img class="profileImage" src="' + imageLink + '"/></a>' +
-//        '<div class="message">' +
-//        '<a style="color: ' + colour + ';" class="twitter-link" href="https://twitter.com/'+ user +'" target="_blank">@' + user + '</a><span class="label label-' + tags + '">' + tags + '</span>' +
-//        '<p class="msg">' + msg + '</p></div>'
-//      );
-//    }
-//
-//
-//  }
-//  lastUser = user;
-//  messageElement.linkify({
-//    target: "_blank"
-//  });
-//
-//  $('#messages').append(messageElement).animate({scrollTop: 1000000}, "slow");
-//
-//  if (document.hasFocus() == false){
-//    unreadMessages = true;
-//    updateTitle();
-//    var nameFormatted = authData.twitter.username;
-//    if (msg.toLowerCase().indexOf(nameFormatted.toLowerCase()) !== -1){
-//        var audio = new Audio('/assets/sound/Ding.mp3');
-//        audio.play();
-//    }else{
-//      if (localStorage.getItem("soundPref") == "1"){
-//        var audio = new Audio('/assets/sound/pop.ogg');
-//        audio.play();
-//      }
-//    }
-//  }
-//}
 function formatTimestamp(timestamp) {
   var date = new Date(timestamp);
   var hours = date.getHours().toString();
@@ -160,7 +101,7 @@ function showMessage(message, user){
   console.log(user);
 
   var twitterUser = user.name;
-  var href = "https://twitter.com/"+ user + "/";
+  var href = "https://twitter.com/"+ user.image + "/";
 
   if (user.name == "Server"){
     msgClass = "server-msg";
@@ -224,7 +165,7 @@ function showMessage(message, user){
   $('#messages').append(messageElement).animate({scrollTop: 1000000}, "slow");
 
 
-  if(canTweet){
+  if(canTweet && false){
     twttr.widgets.load()
   }
 
