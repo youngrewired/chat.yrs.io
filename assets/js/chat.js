@@ -47,7 +47,6 @@ function toggleSoundPref(){
 
 function updateTitle() {
   var title= $(document).find("title");
-  console.log(title);
   if (unreadMessages){
     if (title.text().charAt(0) != "*" ){
       title.text("* " + title.text())
@@ -127,8 +126,9 @@ function showMessage(msg, user, tags, imageLink, colour) {
 
 function getUsers(socket){
   socket.emit("get users", authData.token, function(users){
+    $('#userlist').empty();
     users.data.forEach(function(user){
-      console.log(user);
+      $('#userlist').append("<li>@"+user.name+"</li>");
     });
   });
 }
