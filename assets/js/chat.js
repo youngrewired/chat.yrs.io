@@ -113,7 +113,7 @@ function showMessage(msg, user, tags, imageLink, colour) {
     unreadMessages = true;
     updateTitle();
     var nameFormatted = authData.twitter.username;
-    if (msg.indexOf(nameFormatted) !== -1){
+    if (msg.toLowerCase().indexOf(nameFormatted.toLowerCase()) !== -1){
         var audio = new Audio('/assets/sound/Ding.mp3');
         audio.play();
     }else{
