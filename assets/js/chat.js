@@ -197,7 +197,6 @@ socket.on("user leave", function(user) {
 });
 
 socket.emit("get users", token, function(users){
-  var list = 
   users.forEach(function(user){
     console.log(user);
   });
