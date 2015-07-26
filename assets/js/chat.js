@@ -69,8 +69,13 @@ function showMessage(msg, user, tags, imageLink, colour) {
   var doAppend = true;
 
   var messageElement;
-  if (user == 'RubyBot') {
-    messageElement = $('<li class="bot-msg">').html('<a href="http://yrs.io" target="_blank">' + user + '</a>' + ': ' + msg);
+  if (user == 'RubyBot' && lastUser != 'RubyBot') {
+    messageElement = $('<li>').html(
+      '<a href="https://twitter.com/YRSChat" target="_blank"><img class="profileImage" src="' + imageLink + '"/></a>' +
+      '<div class="message">' +
+      '<a style="color: ruby;" class="twitter-link" href="https://twitter.com/'+ user +'" target="_blank">@' + user + '</a><span class="label label-' + tags + '">' + tags + '</span>' +
+      '<p class="bot-msg">' + msg + '</p></div>'
+    );
 
   } else if (user == 'Server') {
     messageElement = $('<li class="server-msg">').html('<a href="http://yrs.io" target="_blank">' + user + '</a>' + ': ' + msg);
@@ -79,7 +84,6 @@ function showMessage(msg, user, tags, imageLink, colour) {
     if (user == lastUser) {
       messageElement = $('#messages li').last();
       messageElement.find(".message").append("<p class='msg'>" + msg + "</p>");
-      doAppend = false;
     } else if (!imageLink || imageLink == ''){
       messageElement = $('<li>').html(
         '<a href="https://twitter.com/'+ user +'" target="_blank"></a>' +
