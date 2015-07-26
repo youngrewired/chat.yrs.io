@@ -118,7 +118,7 @@ function banUser(name, by, callback) {
 		});
 		return;
 	}
-	
+
 	if (userObj.banned){
 		callback({
 			status: "failed",
@@ -237,7 +237,7 @@ io.on('connection', function(socket){
 						if(docs[0]) {
 							userObj.tags = docs[0].rank;
 						} else {
-							userObj.tags = 'YRSer';
+							userObj.tags = 'Community';
 						}
 					});
 
