@@ -284,9 +284,9 @@ function setRank(user, rank, by, callback) {
 				userObj.tags = rank;
 				callback({
 					status: "success",
-					message: "'" + userObj.name + " is now a " + rank + "."
+					message: "'" + userObj.name + "'`t is now a " + rank + "."
 				});
-				say("'" + userObj.name + " is now a " + rank + ".")
+				say("'" + userObj.name + "' is now a " + rank + ".")
 			}
 		}
 	)
