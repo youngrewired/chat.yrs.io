@@ -98,10 +98,10 @@ function showMessage(message, user){
   var hasImage = Boolean(user.image);
   var wasLastUser = lastUser == user.name;
   var canTweet = true;
-  console.log(user);
 
   var twitterUser = user.name;
   var href = "https://twitter.com/"+ user.image + "/";
+  var html = "<li>";
 
   if (user.name == "Server"){
     msgClass = "server-msg";
@@ -115,38 +115,35 @@ function showMessage(message, user){
     href = "http://twitter.com/YRSChat"
   }
 
-  var messageElement = $('<li>');
 
   if (!wasLastUser) {
     if (hasImage) {
-      messageElement.html('<a href="' + href + '" target="_blank"><img class="profileImage" src="' + user.image + '"/></a>')
+      html += '<a href="' + href + '" target="_blank"><img class="profileImage" src="' + user.image + '"/></a>';
     }
 
-    messageElement.html(messageElement.html()+
-      '<div class="message">' +
+    html += '<div class="message">' +
       '<a style="color: ' + user.colour + ';" class="twitter-link" href="https://twitter.com/'+ twitterUser +'" target="_blank">' + '@' + user.name + '</a>' +
       '<span class="label label-' + user.tags + '">' + user.tags + '</span><span class="label">' + formatTimestamp(message.timestamp) + '</span>' +
-      '<p class="' + msgClass + '">' + message.text + '</p>'
-    );
+      '<p class="' + msgClass + '">' + message.text + '</p>';
 
     if(canTweet){
-      messageElement.html(messageElement.html() + '<a href="https://twitter.com/share" ' +
+      html += '<a href="https://twitter.com/share" ' +
         'class="twitter-share-button"' +
         'data-url="http://chat.yrs.io" ' +
         'data-text="' + message.text + '" ' +
         'data-via="YRSChat" ' +
         'data-count="none">' +
-        'Tweet</a>'
-      )
+        'Tweet</a>' + '</div>';
+    } else {
+      html += '</div>';
     }
 
-    messageElement.html(messageElement.html() + '</div>');
   } else {
     messageElement = $('#messages li').last();
+    messageElement.find(".message").append("<p class='msg'>" + message.text + "</p>");
 
     if (canTweet){
       messageElement.find(".message").append(
-        "<p class='msg'>" + message.text + "</p>" +
         '<a href="https://twitter.com/share" ' +
         'class="twitter-share-button"' +
         'data-url="http://chat.yrs.io" ' +
@@ -158,15 +155,21 @@ function showMessage(message, user){
     }
   }
 
-  lastUser = user.name;
+  html += "</li>";
+  var messageElement = $(html);
+
+
   messageElement.linkify({
     target: "_blank"
   });
 
-  $('#messages').append(messageElement).animate({scrollTop: 1000000}, "slow");
+  if (!wasLastUser){
+    $('#messages').append(messageElement).animate({scrollTop: 1000000}, "slow");
+  }
 
+  lastUser = user.name;
 
-  if(canTweet && false){
+  if(canTweet){
     twttr.widgets.load()
   }
 
