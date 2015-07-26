@@ -272,6 +272,9 @@ form button {
   border-bottom: 1px solid #efefef;
   overflow:auto;
   overflow-y:hidden;
+  width:auto;
+  overflow-x:scroll;
+  white-space: nowrap;
 }
 
 #userlist {
