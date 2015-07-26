@@ -203,10 +203,13 @@ function say(message){
 
 io.on('connection', function(socket){
 	socket.on("user join", function(token, username, imageLink){
+		if (!token) return;
+		if (!username) return;
+		if (!imageLink) return;
+
 		username = escapeHTML(username);
 		imageLink = escapeHTML(imageLink);
 
-		if (!token) return;
 		if (token == config.rubytoken){
 			if (!usersByToken[token]){
 				usersByToken[token] = newUser(token, username, imageLink);
