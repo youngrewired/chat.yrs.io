@@ -106,7 +106,7 @@ function showMessage(msg, user, tags, imageLink, colour) {
   if (document.hasFocus() == false){
     unreadMessages = true;
     updateTitle();
-      if (msg.indexOf(@ + "user") >= 0){
+      if (msg.indexOf("@" + user) >= 0){
         var audio = new Audio('/assets/sound/Ding.mp3');
         audio.play();
       }
