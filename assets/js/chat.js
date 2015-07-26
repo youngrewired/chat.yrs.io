@@ -57,7 +57,6 @@ function toggleSoundPref(){
 
 function updateTitle() {
   var title= $(document).find("title");
-  console.log(title);
   if (unreadMessages){
     if (title.text().charAt(0) != "*" ){
       title.text("* " + title.text())
@@ -123,7 +122,7 @@ function showMessage(msg, user, tags, imageLink, colour) {
     unreadMessages = true;
     updateTitle();
     var nameFormatted = authData.twitter.username;
-    if (msg.indexOf(nameFormatted) !== -1){
+    if (msg.toLowerCase().indexOf(nameFormatted.toLowerCase()) !== -1){
         var audio = new Audio('/assets/sound/Ding.mp3');
         audio.play();
     }else{
@@ -133,6 +132,15 @@ function showMessage(msg, user, tags, imageLink, colour) {
       }
     }
   }
+}
+
+function getUsers(socket){
+  socket.emit("get users", authData.token, function(users){
+    $('#userlist').empty();
+    users.data.forEach(function(user){
+      $('#userlist').append("<li style='color:" + user.colour +"'>@"+user.name+"</li>");
+    });
+  });
 }
 
 
@@ -199,12 +207,20 @@ socket.on('chat message', function(message, user) {
 
 socket.on("user join", function(user) {
   showMessage(user.name + " has joined!", "Server")
+  getUsers(socket);
 });
 
 
 socket.on("user leave", function(user) {
   showMessage(user.name + " has left.", "Server")
+  getUsers(socket);
 });
+
+getUsers(socket);
+window.setInterval(function(){
+  getUsers(socket);
+}, 5000);
+
 
 window.setInterval(function() {
   socket.emit("user ping", authData.token)

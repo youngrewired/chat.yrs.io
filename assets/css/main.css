@@ -133,7 +133,7 @@ header .head-content {
   font-family: 'Open Sans';
   font-weight: 300;
   width: 100%;
-  padding-bottom: 10px;
+  padding-bottom: 60px; /*Temporary, needs refining*/
 }
 
 form {
@@ -267,5 +267,26 @@ form button {
   color: #03A9F4;
 }
 
+#users{
+  height: 50px;
+  border-bottom: 1px solid #efefef;
+  overflow:auto;
+  overflow-y:hidden;
+  width:auto;
+  overflow-x:scroll;
+  white-space: nowrap;
+}
 
-/* MOBILE */
+#userlist {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 0px 10px 0px 10px;
+  padding:10px;
+}
+
+#userlist li {
+  display: inline;
+  list-style-type: none;
+  padding-right: 20px;
+}
