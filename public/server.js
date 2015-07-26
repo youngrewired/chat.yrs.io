@@ -25,12 +25,12 @@ var db = mongojs('mongodb://localhost:27017/yrs', ['admins', 'ranks', 'bans']);
 //   smartypants: false
 // });
 
-var configdata = fs.readFileSync("config.json", "utf8", function(err, data) {
+var configdata = fs.readFileSync("../configs/config.json", "utf8", function(err, data) {
 	if (err) throw err;
 });
 var config = JSON.parse(configdata);
 
-var colourdata = fs.readFileSync("colours.json", "utf8", function(err, data) {
+var colourdata = fs.readFileSync("../configs/colours.json", "utf8", function(err, data) {
 	if (err) throw err;
 });
 var colours = JSON.parse(colourdata);
