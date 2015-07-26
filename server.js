@@ -425,7 +425,6 @@ io.on('connection', function(socket){
 		for (var name in usersByName){
 			var user = getUserByName(name);
 			if (user.online){
-				console.log(getSafeUserByName(name));
 				retUsers.push(getSafeUserByName(name));
 			}
 		}
