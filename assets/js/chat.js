@@ -9,6 +9,8 @@ var unreadMessages =  false;
 var soundEnabledText = "Sound enabled";
 var soundDisabledText = "Mentions Only";
 var lostConnection = false;
+var ServerUser = {name: "Server", tags: "Server", image: "", colour: "inherit"};
+
 
 var msgbox = $("#message");
 
@@ -64,64 +66,126 @@ window.onfocus = function() {
   updateTitle();
 };
 
-function showMessage(msg, user, tags, imageLink, colour) {
-  msg = emojione.toImage(msg);
-  var doAppend = true;
-
-  var messageElement;
-  if (user == 'RubyBot' && lastUser != 'RubyBot') {
-    messageElement = $('<li>').html(
-      '<a href="https://twitter.com/YRSChat" target="_blank"><img class="profileImage" src="' + imageLink + '"/></a>' +
-      '<div class="message">' +
-      '<a style="color: ruby;" class="twitter-link" href="https://twitter.com/'+ user +'" target="_blank">@' + user + '</a><span class="label label-' + tags + '">' + tags + '</span>' +
-      '<p class="bot-msg">' + msg + '</p></div>'
-    );
-
-  } else if (user == 'Server') {
-    messageElement = $('<li class="server-msg">').html('<a href="http://yrs.io" target="_blank">' + user + '</a>' + ': ' + msg);
-
-  } else {
-    if (user == lastUser) {
-      messageElement = $('#messages li').last();
-      messageElement.find(".message").append("<p class='msg'>" + msg + "</p>");
-    } else if (!imageLink || imageLink == ''){
-      messageElement = $('<li>').html(
-        '<a href="https://twitter.com/'+ user +'" target="_blank"></a>' +
-        '<div class="message">' +
-        '<a style="color: ' + colour + ';" class="twitter-link" href="https://twitter.com/'+ user +'" target="_blank">@' + user + '</a><span class="label label-' + tags + '">' + tags + '</span>' +
-        '<p class="msg">' + msg + '</p></div>'
-      );
-    } else {
-      messageElement = $('<li>').html(
-        '<a href="https://twitter.com/'+ user +'" target="_blank"><img class="profileImage" src="' + imageLink + '"/></a>' +
-        '<div class="message">' +
-        '<a style="color: ' + colour + ';" class="twitter-link" href="https://twitter.com/'+ user +'" target="_blank">@' + user + '</a><span class="label label-' + tags + '">' + tags + '</span>' +
-        '<p class="msg">' + msg + '</p></div>'
-      );
-    }
-
-
+//function showMessage(msg, user, tags, imageLink, colour) {
+//  msg = emojione.toImage(msg);
+//
+//  var messageElement;
+//  if (user == 'RubyBot' && lastUser != 'RubyBot') {
+//    messageElement = $('<li>').html(
+//      '<a href="https://twitter.com/YRSChat" target="_blank"><img class="profileImage" src="' + imageLink + '"/></a>' +
+//      '<div class="message">' +
+//      '<a style="color: ruby;" class="twitter-link" href="https://twitter.com/'+ user +'" target="_blank">@' + user + '</a><span class="label label-' + tags + '">' + tags + '</span>' +
+//      '<p class="bot-msg">' + msg + '</p></div>'
+//    );
+//
+//  } else if (user == 'Server') {
+//    messageElement = $('<li class="server-msg">').html('<a href="http://yrs.io" target="_blank">' + user + '</a>' + ': ' + msg);
+//
+//  } else {
+//    if (user == lastUser) {
+//      messageElement = $('#messages li').last();
+//      messageElement.find(".message").append("<p class='msg'>" + msg + "</p>");
+//    } else if (!imageLink || imageLink == ''){
+//      messageElement = $('<li>').html(
+//        '<a href="https://twitter.com/'+ user +'" target="_blank"></a>' +
+//        '<div class="message">' +
+//        '<a style="color: ' + colour + ';" class="twitter-link" href="https://twitter.com/'+ user +'" target="_blank">@' + user + '</a><span class="label label-' + tags + '">' + tags + '</span>' +
+//        '<p class="msg">' + msg + '</p></div>'
+//      );
+//    } else {
+//      messageElement = $('<li>').html(
+//        '<a href="https://twitter.com/'+ user +'" target="_blank"><img class="profileImage" src="' + imageLink + '"/></a>' +
+//        '<div class="message">' +
+//        '<a style="color: ' + colour + ';" class="twitter-link" href="https://twitter.com/'+ user +'" target="_blank">@' + user + '</a><span class="label label-' + tags + '">' + tags + '</span>' +
+//        '<p class="msg">' + msg + '</p></div>'
+//      );
+//    }
+//
+//
+//  }
+//  lastUser = user;
+//  messageElement.linkify({
+//    target: "_blank"
+//  });
+//
+//  $('#messages').append(messageElement).animate({scrollTop: 1000000}, "slow");
+//
+//  if (document.hasFocus() == false){
+//    unreadMessages = true;
+//    updateTitle();
+//    var nameFormatted = authData.twitter.username;
+//    if (msg.toLowerCase().indexOf(nameFormatted.toLowerCase()) !== -1){
+//        var audio = new Audio('/assets/sound/Ding.mp3');
+//        audio.play();
+//    }else{
+//      if (localStorage.getItem("soundPref") == "1"){
+//        var audio = new Audio('/assets/sound/pop.ogg');
+//        audio.play();
+//      }
+//    }
+//  }
+//}
+function formatTimestamp(timestamp) {
+  var date = new Date(timestamp);
+  var hours = date.getHours().toString();
+  var minutes = date.getMinutes().toString();
+  if (hours.length == 0){
+    hours = "0" + hours
   }
-  lastUser = user;
-  messageElement.linkify({
-    target: "_blank"
-  });
+  if (minutes.length == 0){
+    minutes = "0" + minutes
+  }
+  return hours + ":" + minutes
+}
+
+function SayAsServer(message){
+  showMessage({text: message, timestamp: Date.now()}, ServerUser)
+}
+
+function showMessage(message, user){
+  var msgClass = "msg";
+  var hasImage = Boolean(user.image);
+  var wasLastUser = lastUser == user.name;
+  var canTweet = true;
+  console.log(user);
+
+  var twitterUser = user.name;
+  var href = "https://twitter.com/"+ user + "/";
+
+  if (user.name == "Server"){
+    msgClass = "server-msg";
+    hasImage = false;
+    wasLastUser = false;
+    canTweet = false;
+    href = "http://yrs.io";
+  }
+  var messageElement = $('<li>');
+
+  if (hasImage) {
+    messageElement.html('<a href="' + href + '" target="_blank"><img class="profileImage" src="' + user.image + '"/></a>')
+  }
+  messageElement.html(messageElement.html()+
+    '<div class="message">' +
+    '<a style="color: ' + user.colour + ';" class="twitter-link" href="https://twitter.com/'+ user.name +'" target="_blank">' + '@' + user.name + '</a>' +
+    '<span class="label label-' + user.tags + '">' + user.tags + '</span><span class="label">' + formatTimestamp(message.timestamp) + '</span>'
+  );
+
+  if(canTweet){
+    messageElement.html(messageElement.html() + '<a href="https://twitter.com/share" ' +
+      'class="twitter-share-button" ' +
+      'data-url="http://chat.yrs.io" ' +
+      'data-text="' + message.text + '" ' +
+      'data-via="YRSChat" ' +
+      'data-count="none">' +
+      'Tweet</a>')
+  }
+
+  messageElement.html(messageElement.html() + '<p class="' + msgClass + '">' + message.text + '</p></div>');
 
   $('#messages').append(messageElement).animate({scrollTop: 1000000}, "slow");
 
-  if (document.hasFocus() == false){
-    unreadMessages = true;
-    updateTitle();
-    var nameFormatted = authData.twitter.username;
-    if (msg.toLowerCase().indexOf(nameFormatted.toLowerCase()) !== -1){
-        var audio = new Audio('/assets/sound/Ding.mp3');
-        audio.play();
-    }else{
-      if (localStorage.getItem("soundPref") == "1"){
-        var audio = new Audio('/assets/sound/pop.ogg');
-        audio.play();
-      }
-    }
+  if(canTweet){
+    twttr.widgets.load()
   }
 }
 
@@ -158,7 +222,7 @@ $('form').submit(function(){
       authData.token,
       function(response) {
         if (response.status == "failed"){
-          showMessage(response.message, "Server", "", "");
+          showMessage(response.message, ServerUser);
         }
       }
     );
@@ -172,28 +236,28 @@ $('form').submit(function(){
 socket.on("connect", function(){
   if (!authData) return;
   if (!lostConnection) return;
-  showMessage("You have reconnected to the server.", "Server");
+  SayAsServer("You have reconnected to the server.");
   socket.emit("user join", authData.token, authData.twitter.username, authData.twitter.profileImageURL);
   lostConnection = false;
 });
 
 socket.on("disconnect", function(){
-  showMessage("You have been temporarlly disconnected from the server.", "Server");
+  SayAsServer("You have been temporarlly disconnected from the server.");
   lostConnection = true;
 });
 
 socket.on('chat message', function(message, user) {
-  showMessage(message, user.name, user.tags, user.image, user.colour);
+  showMessage(message, user);
 });
 
 
 socket.on("user join", function(user) {
-  showMessage(user.name + " has joined!", "Server")
+  SayAsServer(user.name + " has joined!")
 });
 
 
 socket.on("user leave", function(user) {
-  showMessage(user.name + " has left.", "Server")
+  SayAsServer(user.name + " has left.")
 });
 
 window.setInterval(function() {
