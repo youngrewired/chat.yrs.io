@@ -255,7 +255,7 @@ form button {
 }
 
 .label-Developer {
-  background-color: #FF5722;
+  background-color: #03A9F4;
   color: #ffffff;
 }
 
@@ -269,14 +269,9 @@ form button {
 }
 
 #messages .bot-msg {
-  margin: 10px;
-  padding: 20px 10px;
-  background-color: #E0E0E0;
-  border-radius: 5px;
-  -moz-border-radius: 5px;
-  -webkit-border-radius: 5px;
+  color: #e34f50;
 }
 
 #messages .server-msg {
-  color: red;
+  color: #03A9F4;
 }
