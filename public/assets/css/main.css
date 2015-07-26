@@ -214,6 +214,7 @@ form button {
 
 #messages li .message {
   display: inline-block;
+  max-width: calc(100% - 50px)
 }
 
 #messages li .twitter-link {
