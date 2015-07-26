@@ -133,7 +133,7 @@ header .head-content {
   font-family: 'Open Sans';
   font-weight: 300;
   width: 100%;
-  padding-bottom: 10px;
+  padding-bottom: 75px; /*Temporary, needs refining*/
 }
 
 form {
