@@ -37,7 +37,7 @@ var colours = JSON.parse(colourdata);
 
 var ref = new Firebase(config.firebase_url);
 
-var adminTags = ["Dev", "Ambassador", "Staff"];
+var adminTags = ["Developer", "Ambassador", "Staff"];
 
 var tokenToName = {};
 //var usersByToken = {};
