@@ -49,7 +49,6 @@ function toggleSoundPref(){
 
 function updateTitle() {
   var title= $(document).find("title");
-  console.log(title);
   if (unreadMessages){
     if (title.text().charAt(0) != "*" ){
       title.text("* " + title.text())
