@@ -214,6 +214,7 @@ form button {
 
 #messages li .message {
   display: inline-block;
+  max-width: calc(100% - 50px)
 }
 
 #messages li .twitter-link {
@@ -268,13 +269,11 @@ form button {
   color: #03A9F4;
 }
 
-#users{
+#users {
   height: 50px;
   border-bottom: 1px solid #efefef;
-  overflow:auto;
-  overflow-y:hidden;
-  width:auto;
-  overflow-x:auto;
+  overflow-x: auto;
+  overflow-y: hidden;
   white-space: nowrap;
 }
 
@@ -285,14 +284,14 @@ form button {
   position: relative;
   top: 50%;
   transform: translateY(-50%);
+  margin-right: 10px;
 }
 
 #userlist {
   position: relative;
   top: 50%;
   transform: translateY(-50%);
-  padding: 10px;
-  float: left;
+  margin: 2px;
 }
 
 #userlist li {
