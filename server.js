@@ -43,11 +43,22 @@ var validTags = ["Developer", "Ambassador", "Staff", "Community"];
 var tokenToName = {};
 
 var usersByName = {};
+var lastMessageId = 0;
+
+function Message(text) {
+	var escText = escapeHTML(text);
+
+	return {
+		text: escText,
+		timestamp: Date.now()
+	}
+}
 
 function User(token, username, imageLink) {
 		return {
 			token: token,
 			name: username,
+			nameLower: username.toLowerCase(),
 			image: imageLink,
 			tags: '',
 			lastPing: time(),
@@ -397,7 +408,7 @@ io.on('connection', function(socket){
 			return 0;
 		}
 
-		msg = escapeHTML(msg);
+		var message = Message(msg);
 
 		//msg = marked(msg);
 
@@ -410,7 +421,7 @@ io.on('connection', function(socket){
 			return;
 		}
 
-		io.emit('chat message', msg, getSafeUser(token));
+		io.emit('chat message', message, getSafeUser(token));
 
 		fn({
 			status: "success"
@@ -433,7 +444,6 @@ io.on('connection', function(socket){
 			status: "success",
 			data: retUsers
 		})
-
 	})
 });
 
