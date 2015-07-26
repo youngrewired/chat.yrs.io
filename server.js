@@ -38,10 +38,11 @@ var colours = JSON.parse(colourdata);
 var ref = new Firebase(config.firebase_url);
 
 var adminTags = ["Developer", "Ambassador", "Staff"];
+var validTags = ["Developer", "Ambassador", "Staff", "Community"];
 
 var tokenToName = {};
-//var usersByToken = {};
-var usersByName = {}
+
+var usersByName = {};
 
 function User(token, username, imageLink) {
 		return {
@@ -69,6 +70,9 @@ function newUser(token, username, imageLink) {
 
 // set server user...
 var ServerUser = User("", "Server", "");
+function say(message){
+	io.emit("chat message", escapeHTML(message), ServerUser)
+}
 
 
 function getUser(token) {
@@ -95,6 +99,7 @@ function time() {
 function escapeHTML(string) {
 	return string.replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
+
 
 app.get('/', function(req, res) {
 	res.sendFile("./index.html");
@@ -141,7 +146,6 @@ function banUser(name, by, callback) {
 	}, function(err, data){
 		if (err) {
 			console.log(err);
-
 			callback({
 				status: "failed",
 				message: "An unknown error occurred."
@@ -191,20 +195,84 @@ function unbanUser(name, callback) {
 			callback({
 				status: "failed",
 				message: "An unknown error occurred."
-			})
+			});
 		} else {
 			callback({
 				status: "success",
 				message: name + " has been unbanned."
 			})
+			say(name + " has been unbanned.");
 		}
-		console.log("test");
-		say(name + " has been unbanned.");
 	})
 }
 
-function say(message){
-	io.emit("chat message", message, ServerUser)
+function setRank(user, rank, by, callback) {
+	if (!user || !rank){
+		callback({
+			status: "failed",
+			message: escapeHTML("Syntax: `/setrank <user> <rank>` or `/setrank list ranks")
+		});
+		return;
+	}
+
+	if (user == "list" && rank == "ranks") { // bit hacky but w/e
+		callback({
+			status: "failed",
+			message: escapeHTML("The valid ranks are: '" + validTags.join("', '"))
+		});
+		return;
+	}
+
+
+	var userObj = getUserByName(user);
+	if (!userObj){
+		callback({
+			status: "failed",
+			message: escapeHTML("'" + user + "' is not a valid user")
+		});
+		return;
+	}
+
+	if (validTags.indexOf(rank) == -1){
+		callback({
+			status: "failed",
+			message: escapeHTML("'" + rank + "' is not a valid rank. Use `/setrank list ranks` to see all valid ranks")
+		});
+		return;
+	}
+
+	// everything is probably valid at this point
+	db.ranks.update(
+		{people: userObj.name},
+		{$pop: {
+			people: userObj.name
+		}}
+	);
+
+	db.ranks.update(
+		{rank: rank},
+		{
+			$push: {
+				people: userObj.name
+			}
+		},
+		function(err, data){
+			if (err){
+			console.log(err);
+			callback({
+				status: "failed",
+				message: "An unknown error occurred."
+			});
+			} else {
+				userObj.tags = rank;
+				callback({
+					status: "success",
+					message: "'" + userObj.name + " is now a " + rank + "."
+				});
+				say("'" + userObj.name + " is now a " + rank + ".")
+			}
+		}
+	)
 }
 
 io.on('connection', function(socket){
@@ -217,10 +285,10 @@ io.on('connection', function(socket){
 		imageLink = escapeHTML(imageLink);
 
 		if (token == config.rubytoken){
-			if (!usersByToken[token]){
-				usersByToken[token] = newUser(token, username, imageLink);
+			if (!getUser(token)){
+				var userObj = newUser(token, username, imageLink);
 			}
-			io.emit("user join", usersByToken[token]);
+			io.emit("user join", getUser(token));
 			return;
 		}
 
@@ -297,6 +365,10 @@ io.on('connection', function(socket){
 				return;
 			} else if (args[0] == '/unban') {
 				unbanUser(args[1], fn);
+				return;
+			} else if (args[0] == "/setrank") {
+				console.log("test");
+				setRank(args[1], args[2], userObj, fn)
 				return;
 			}
 		}
