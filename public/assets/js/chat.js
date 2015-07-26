@@ -135,7 +135,7 @@ function showMessage(message, user){
     html += '<div class="message">' +
       '<a style="color: ' + user.colour + ';" class="twitter-link" href="https://twitter.com/'+ twitterUser +'" target="_blank">' + '@' + user.name + '</a>' +
       '<span class="label label-' + user.tags + '">' + user.tags + '</span><span class="label">' + formatTimestamp(message.timestamp) + '</span>' +
-      '<p class="' + msgClass + '">' + message.text + '</p>';
+      '<p data-timestamp="' + message.timestamp + '"class="' + msgClass + '">' + message.text + '</p>';
 
     if(canTweet){
       html += makeTweetButton(message.text)
@@ -145,7 +145,7 @@ function showMessage(message, user){
 
   } else {
     messageElement = $('#messages li').last();
-    messageElement.find(".message").append("<p class='msg'>" + message.text + "</p>");
+    messageElement.find(".message").append("<p data-timestamp='" + message.timestamp + "'class='msg'>" + message.text + "</p>");
 
     if (canTweet){
       messageElement.find(".message").append(makeTweetButton(message.text));
@@ -186,6 +186,16 @@ function showMessage(message, user){
   }
 }
 
+function deleteMessage(timestamp){
+  var messageP = $('.msg[data-timestamp=' + timestamp + ']');
+  if (messageP.parent().find("p.msg").length == 1){
+    messageP.parent().parent().remove();
+  } else{
+    messageP.next().remove();
+    messageP.remove();
+  }
+}
+
 
 
 // firebase stuff
@@ -213,14 +223,14 @@ ref.getAuth();
 
 $('form').submit(function(){
   if(canPost == false){
-    showMessage('Please do not spam!', 'Server', '');
+    SayAsServer("Please do not spam!")
   } else {
     socket.emit('chat message',
       msgbox.val(),
       authData.token,
       function(response) {
         if (response.status == "failed"){
-          showMessage(response.message, ServerUser);
+          SayAsServer(response.message)
         }
       }
     );
@@ -250,20 +260,20 @@ socket.on('chat message', function(message, user) {
 
 
 socket.on("user join", function(user) {
-  SayAsServer(user.name + " has joined!")
+  SayAsServer(user.name + " has joined!");
   getUsers(socket);
 });
 
 
 socket.on("user leave", function(user) {
-  SayAsServer(user.name + " has left.")
+  SayAsServer(user.name + " has left.");
   getUsers(socket);
 });
 
 getUsers(socket);
 
 window.setInterval(function() {
-  socket.emit("user ping", authData.token)
+  socket.emit("user ping", authData.token);
   getUsers(socket);
 }, 5000);
 
