@@ -197,13 +197,16 @@ socket.on('chat message', function(message, user) {
 
 socket.on("user join", function(user) {
   showMessage(user.name + " has joined!", "Server")
+  getUsers(socket);
 });
 
 
 socket.on("user leave", function(user) {
   showMessage(user.name + " has left.", "Server")
+  getUsers(socket);
 });
 
+getUsers(socket);
 window.setInterval(function(){
   getUsers(socket);
 }, 5000);
