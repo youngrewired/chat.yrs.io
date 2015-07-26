@@ -92,9 +92,9 @@ function showMessage(msg, user, tags, imageLink, colour) {
       );
     }
 
-    lastUser = user
-  }
 
+  }
+  lastUser = user
   messageElement.linkify({
     target: "_blank"
   });
