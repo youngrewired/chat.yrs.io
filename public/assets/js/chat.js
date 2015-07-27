@@ -5,6 +5,7 @@ var socket = io();
 var canPost = true;
 var authData;
 var lastUser;
+var lastNotification;
 var unreadMessages =  false;
 var soundEnabledText = "Sound enabled";
 var soundDisabledText = "Mentions Only";
@@ -185,6 +186,19 @@ function showMessage(message, user){
         audio.play();
       }
     }
+    if(notify.permissionLevel() == notify.PERMISSION_GRANTED){
+      if(lastNotification){
+        lastNotification.close();
+	  }
+	  if(message.text.length > 300){
+	    notificationtext = message.text.substring(0, 300) + "...";
+      }
+	  else
+	  {
+        notificationtext = message.text;
+	  }
+      lastNotification = notify.createNotification("YRS Chat: @" + user.name, {body: notificationtext, icon: "/assets/images/notification.png"})
+    }
   }
 }
 
@@ -285,6 +299,14 @@ getUsers(socket);
 $(window).unload(function() {
   socket.emit("user leave", authData.token);
 })
+
+//check whether notifications are enabled, if so set up options, if not request permission
+if(notify.permissionLevel() == notify.PERMISSION_DEFAULT){
+  notify.requestPermission();
+}
+else if(notify.permissionLevel() == notify.PERMISSION_GRANTED){
+  notify.config({pageVisibility: true, autoClose: 1200});
+}
 });
 
 window.onbeforeunload = function(){
