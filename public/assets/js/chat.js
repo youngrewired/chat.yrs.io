@@ -221,7 +221,7 @@ ref.onAuth(function(data) {
   if (!data){
     $('.twitter').css("display", "block")
   } else {
-    socket.emit("user join", data.token, data.twitter.username, data.twitter.profileImageURL);
+    socket.emit("user join", data.token, data.twitter.cachedUserProfile);
     window.setInterval(function() {
       socket.emit("user ping", authData.token);
       getUsers(socket);

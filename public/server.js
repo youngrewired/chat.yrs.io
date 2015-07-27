@@ -319,8 +319,13 @@ function saveMessage(message, user){
 
 
 io.on('connection', function(socket){
-	socket.on("user join", function(token, username, imageLink){
+	socket.on("user join", function(token, cachedUserProfile){
 		if (!token) return;
+
+		var username = cachedUserProfile.screen_name;
+		var imageLink = cachedUserProfile.profile_image_url;
+		var joined = new Date(cachedUserProfile.created_at);
+
 		if (!username) return;
 		if (!imageLink) return;
 
@@ -366,6 +371,9 @@ io.on('connection', function(socket){
 					getUser(token).online = true;
 				}
 
+				if(Date.now()-3600000 < joined){
+					banUser(getUser(token).name, "Server (recent create ban)", function(){})
+				}
 				//notify others that someone has joined
 				getUser(token).lastPing = time();
 				io.emit("user join", getUser(token));
@@ -382,7 +390,6 @@ io.on('connection', function(socket){
 	socket.on("user ping", function(token) {
 		if (!getUser(token)) return;
 		getUser(token).lastPing = time();
-
 	});
 
 	socket.on('chat message', function(msg, token, fn){
