@@ -336,7 +336,6 @@ io.on('connection', function(socket){
 						'people': userObj.nameLower
 					}, function(err, docs) {
 						if(docs[0]) {
-							console.log(docs)
 							userObj.tags = docs[0].rank;
 						} else {
 							userObj.tags = 'Community';
