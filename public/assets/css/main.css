@@ -271,27 +271,13 @@ form button {
   white-space: nowrap;
 }
 
-#users h3 {
-  float: left;
-  font-weight: 300;
-  margin-left: 20px;
-  position: relative;
-  top: 50%;
-  transform: translateY(-50%);
-  margin-right: 10px;
-}
-
 #userlist {
   position: relative;
-  top: 50%;
-  transform: translateY(-50%);
   margin: 2px;
 }
 
 #userlist li {
-  display: inline;
   list-style: none;
-  margin-right: 20px;
 }
 
 text.highlight-mention{
@@ -336,7 +322,7 @@ text.highlight-mention{
     border-bottom: 1px solid #efefef;
   }
   #users #userlist{
-    padding-top: 15px;
+    padding-top: 10px;
   }
   #users #userlist li{
     display: block;
