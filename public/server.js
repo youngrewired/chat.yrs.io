@@ -70,7 +70,8 @@ function User(token, username, imageLink) {
 			lastPing: time(),
 			online: true,
 			banned: false,
-			colour: colours[Math.floor(Math.random()*colours.length)]
+			colour: colours[Math.floor(Math.random()*colours.length)],
+			lastMessage: 0
 		}
 }
 
@@ -436,6 +437,15 @@ io.on('connection', function(socket){
 			return 0;
 		}
 
+		if (Date.now()-1000 < userObj.lastMessage ){
+			fn({
+				status: "failed",
+				message: "Please don't spam."
+			});
+			return 0;
+		}
+
+
 		var message = Message(msg);
 
 		//msg = marked(msg);
@@ -451,7 +461,7 @@ io.on('connection', function(socket){
 
 		io.emit('chat message', message, getSafeUser(token));
 		saveMessage(message, userObj);
-
+		userObj.lastMessage = Date.now()
 		fn({
 			status: "success"
 		});
