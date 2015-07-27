@@ -214,8 +214,8 @@ form button {
 }
 
 #messages li .twitter-share-button {
-  display: inline;
   padding-top: 3px;
+  display: inline !important;
 }
 
 #messages li .label {
@@ -261,6 +261,41 @@ form button {
 #messages .server-msg,
 #messages .server-msg a {
   color: #03A9F4;
+}
+
+#users {
+  height: 50px;
+  border-bottom: 1px solid #efefef;
+  overflow-x: auto;
+  overflow-y: hidden;
+  white-space: nowrap;
+}
+
+#users h3 {
+  float: left;
+  font-weight: 300;
+  margin-left: 20px;
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+  margin-right: 10px;
+}
+
+#userlist {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+  margin: 2px;
+}
+
+#userlist li {
+  display: inline;
+  list-style: none;
+  margin-right: 20px;
+}
+
+text.highlight-mention{
+  background-color: yellow;
 }
 
 /* MOBILE */

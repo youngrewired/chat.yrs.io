@@ -11,7 +11,7 @@ var mongojs = require('mongojs');
 banned = list.array;
 
 app.use(express.static(__dirname));
-var db = mongojs('mongodb://localhost:27017/yrs', ['admins', 'ranks', 'bans']);
+var db = mongojs('mongodb://localhost:27017/yrs', ['admins', 'ranks', 'bans', 'messages']);
 
 //var marked = require('marked');
 // marked.setOptions({
@@ -39,6 +39,12 @@ var ref = new Firebase(config.firebase_url);
 
 var adminTags = ["Developer", "Ambassador", "Staff"];
 var validTags = ["Developer", "Ambassador", "Staff", "Community"];
+var tagConv = {
+	developer: "Developer",
+	ambassador: "Ambassador",
+	staff: "Staff",
+	community: "Community"
+};
 
 var tokenToName = {};
 
@@ -69,18 +75,19 @@ function User(token, username, imageLink) {
 }
 
 function newUser(token, username, imageLink) {
-	if (usersByName[username]) {
-		tokenToName[token] = username;
-		return usersByName[username];
+	if (getUserByName(username)) {
+		tokenToName[token] = username.toLowerCase();
+		return usersByName[username.toLowerCase()];
 	}
 	var userObj = User(token, username, imageLink);
-	usersByName[username] = userObj;
-	tokenToName[token] = username;
+	usersByName[username.toLowerCase()] = userObj;
+	tokenToName[token] = username.toLowerCase();
 	return userObj
 }
 
 // set server user...
 var ServerUser = User("", "Server", "");
+ServerUser.tags = "Server";
 function say(message){
 	io.emit("chat message", Message(message), ServerUser)
 }
@@ -92,7 +99,8 @@ function getUser(token) {
 }
 
 function getUserByName(name) {
-	return usersByName[name]
+	if (!name) return;
+	return usersByName[name.toLowerCase()]
 }
 
 function getSafeUser(token) {
@@ -138,6 +146,7 @@ function banUser(name, by, callback) {
 		});
 		return;
 	}
+
 	var userObj = getUserByName(name.replace("@", ""));
 	if (!userObj){
 		callback({
@@ -231,6 +240,8 @@ function setRank(user, rank, by, callback) {
 		});
 		return;
 	}
+	rank = tagConv[rank.toLowerCase()];
+
 
 	if (user == "list" && rank == "ranks") { // bit hacky but w/e
 		callback({
@@ -260,9 +271,9 @@ function setRank(user, rank, by, callback) {
 
 	// everything is probably valid at this point
 	db.ranks.update(
-		{people: userObj.name},
+		{people: userObj.nameLower},
 		{$pop: {
-			people: userObj.name
+			people: userObj.nameLower
 		}}
 	);
 
@@ -270,7 +281,7 @@ function setRank(user, rank, by, callback) {
 		{rank: rank},
 		{
 			$push: {
-				people: userObj.name
+				people: userObj.nameLower
 			}
 		},
 		function(err, data){
@@ -291,6 +302,20 @@ function setRank(user, rank, by, callback) {
 		}
 	)
 }
+
+function deleteMessage(timestamp){
+	if(!timestamp) return;
+	io.emit("delete message", timestamp)
+}
+
+function saveMessage(message, user){
+	db.messages.insert({
+		user: user["nameLower"],
+		message: message["text"],
+		ts: message["timestamp"]
+	})
+}
+
 
 io.on('connection', function(socket){
 	socket.on("user join", function(token, username, imageLink){
@@ -319,14 +344,14 @@ io.on('connection', function(socket){
 
 					// set ban flag
 					db.bans.find({
-						'user': username
+						'user': userObj.nameLower
 					}, function(err, docs) {
 						if (docs[0]) userObj.banned = true;
 					});
 
 					// set tag
 					db.ranks.find({
-						'people': username
+						'people': userObj.nameLower
 					}, function(err, docs) {
 						if(docs[0]) {
 							userObj.tags = docs[0].rank;
@@ -377,15 +402,18 @@ io.on('connection', function(socket){
 		// commands section
 		var args = msg.split(" ");
 		if (adminTags.indexOf(userObj.tags) != -1){
+			args[0] = args[0].toLowerCase();
 			if(args[0] == '/ban') {
-				banUser(args[1], userObj.name, fn);
+				banUser(args[1], userObj.nameLower, fn);
 				return;
 			} else if (args[0] == '/unban') {
 				unbanUser(args[1], fn);
 				return;
 			} else if (args[0] == "/setrank") {
-				console.log("test");
-				setRank(args[1], args[2], userObj, fn)
+				setRank(args[1], args[2], userObj, fn);
+				return;
+			} else if (args[0] == "/delete") {
+				deleteMessage(args[1]);
 				return;
 			}
 		}
@@ -422,6 +450,7 @@ io.on('connection', function(socket){
 		}
 
 		io.emit('chat message', message, getSafeUser(token));
+		saveMessage(message, userObj);
 
 		fn({
 			status: "success"
