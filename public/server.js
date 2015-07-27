@@ -69,13 +69,13 @@ function User(token, username, imageLink) {
 }
 
 function newUser(token, username, imageLink) {
-	if (usersByName[username]) {
-		tokenToName[token] = username;
-		return usersByName[username];
+	if (getUserByName(username)) {
+		tokenToName[token] = username.toLowerCase();
+		return usersByName[username.toLowerCase()];
 	}
 	var userObj = User(token, username, imageLink);
-	usersByName[username] = userObj;
-	tokenToName[token] = username;
+	usersByName[username.toLowerCase()] = userObj;
+	tokenToName[token] = username.toLowerCase();
 	return userObj
 }
 
@@ -92,7 +92,8 @@ function getUser(token) {
 }
 
 function getUserByName(name) {
-	return usersByName[name]
+	if (!name) return;
+	return usersByName[name.toLowerCase()]
 }
 
 function getSafeUser(token) {
@@ -138,6 +139,7 @@ function banUser(name, by, callback) {
 		});
 		return;
 	}
+
 	var userObj = getUserByName(name.replace("@", ""));
 	if (!userObj){
 		callback({
@@ -260,9 +262,9 @@ function setRank(user, rank, by, callback) {
 
 	// everything is probably valid at this point
 	db.ranks.update(
-		{people: userObj.name},
+		{people: userObj.nameLower},
 		{$pop: {
-			people: userObj.name
+			people: userObj.nameLower
 		}}
 	);
 
@@ -270,7 +272,7 @@ function setRank(user, rank, by, callback) {
 		{rank: rank},
 		{
 			$push: {
-				people: userObj.name
+				people: userObj.nameLower
 			}
 		},
 		function(err, data){
@@ -324,16 +326,17 @@ io.on('connection', function(socket){
 
 					// set ban flag
 					db.bans.find({
-						'user': username
+						'user': userObj.nameLower
 					}, function(err, docs) {
 						if (docs[0]) userObj.banned = true;
 					});
 
 					// set tag
 					db.ranks.find({
-						'people': username
+						'people': userObj.nameLower
 					}, function(err, docs) {
 						if(docs[0]) {
+							console.log(docs)
 							userObj.tags = docs[0].rank;
 						} else {
 							userObj.tags = 'Community';
@@ -383,7 +386,7 @@ io.on('connection', function(socket){
 		var args = msg.split(" ");
 		if (adminTags.indexOf(userObj.tags) != -1){
 			if(args[0] == '/ban') {
-				banUser(args[1], userObj.name, fn);
+				banUser(args[1], userObj.nameLower, fn);
 				return;
 			} else if (args[0] == '/unban') {
 				unbanUser(args[1], fn);
