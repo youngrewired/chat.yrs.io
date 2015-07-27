@@ -261,7 +261,7 @@ socket.on('chat message', function(message, user) {
 
 
 socket.on("user join", function(user) {
-  SayAsServer(user.name + " has joined!");
+  // SayAsServer(user.name + " has joined!");
   getUsers(socket);
 });
 
