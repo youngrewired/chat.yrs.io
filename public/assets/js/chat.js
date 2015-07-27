@@ -267,7 +267,7 @@ socket.on("user join", function(user) {
 
 
 socket.on("user leave", function(user) {
-  SayAsServer(user.name + " has left.");
+  // SayAsServer(user.name + " has left.");
   getUsers(socket);
 });
 
