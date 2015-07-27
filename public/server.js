@@ -87,6 +87,7 @@ function newUser(token, username, imageLink) {
 
 // set server user...
 var ServerUser = User("", "Server", "");
+ServerUser.tags = "Server";
 function say(message){
 	io.emit("chat message", Message(message), ServerUser)
 }
