@@ -39,6 +39,12 @@ var ref = new Firebase(config.firebase_url);
 
 var adminTags = ["Developer", "Ambassador", "Staff"];
 var validTags = ["Developer", "Ambassador", "Staff", "Community"];
+var tagConv = {
+	developer: "Developer",
+	ambassador: "Ambassador",
+	staff: "Staff",
+	community: "Community"
+};
 
 var tokenToName = {};
 
@@ -233,6 +239,8 @@ function setRank(user, rank, by, callback) {
 		});
 		return;
 	}
+	rank = tagConv[rank.toLowerCase()];
+
 
 	if (user == "list" && rank == "ranks") { // bit hacky but w/e
 		callback({
