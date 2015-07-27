@@ -114,6 +114,10 @@ function showMessage(message, user){
   var href = "https://twitter.com/"+ user.image + "/";
   var html = "<li>";
 
+  // highlight the current users
+  var re = new RegExp("@?" + authData.twitter.username, "ig");
+  message.text = message.text.replace(re, "<text class='highlight-mention'>@" + authData.twitter.username + "</text>")
+
   if (user.name == "Server"){
     msgClass = "server-msg";
     hasImage = false;
@@ -177,7 +181,7 @@ function showMessage(message, user){
     if (message.text.toLowerCase().indexOf(nameFormatted.toLowerCase()) !== -1){
         var audio = new Audio('/assets/sound/Ding.mp3');
         audio.play();
-    }else{
+    } else {
       if (localStorage.getItem("soundPref") == "1"){
         var audio = new Audio('/assets/sound/pop.ogg');
         audio.play();
@@ -191,7 +195,7 @@ function deleteMessage(timestamp){
   if (messageP.parent().find("p.msg").length == 1){
     messageP.parent().parent().remove();
     lastUser=null;
-  } else{
+  } else if (messageP.parent().find("p.msg").length !== 0){
     messageP.next().remove();
     messageP.remove();
   }
@@ -206,6 +210,10 @@ ref.onAuth(function(data) {
     $('.twitter').css("display", "block")
   } else {
     socket.emit("user join", data.token, data.twitter.username, data.twitter.profileImageURL);
+    window.setInterval(function() {
+      socket.emit("user ping", authData.token);
+      getUsers(socket);
+    }, 5000);
   }
 });
 
@@ -261,7 +269,7 @@ socket.on('chat message', function(message, user) {
 
 
 socket.on("user join", function(user) {
-  // SayAsServer(user.name + " has joined!");
+  //SayAsServer(user.name + " has joined!");
   getUsers(socket);
 });
 
@@ -274,11 +282,6 @@ socket.on("user leave", function(user) {
 socket.on("delete message", deleteMessage);
 
 getUsers(socket);
-
-window.setInterval(function() {
-  socket.emit("user ping", authData.token);
-  getUsers(socket);
-}, 5000);
 
 
 $(window).unload(function() {
