@@ -160,7 +160,9 @@ function showMessage(message, user){
     target: "_blank"
   });
 
-  $('#messages').append(messageElement).animate({scrollTop: 1000000}, "slow");
+  if (!wasLastUser){
+    $('#messages').append(messageElement).animate({scrollTop: 1000000}, "slow");
+  }
 
   lastUser = user.name;
 
