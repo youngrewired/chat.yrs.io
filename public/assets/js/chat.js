@@ -206,6 +206,10 @@ ref.onAuth(function(data) {
     $('.twitter').css("display", "block")
   } else {
     socket.emit("user join", data.token, data.twitter.username, data.twitter.profileImageURL);
+    window.setInterval(function() {
+      socket.emit("user ping", authData.token);
+      getUsers(socket);
+    }, 5000);
   }
 });
 
@@ -275,10 +279,7 @@ socket.on("delete message", deleteMessage);
 
 getUsers(socket);
 
-window.setInterval(function() {
-  socket.emit("user ping", authData.token);
-  getUsers(socket);
-}, 5000);
+
 
 
 $(window).unload(function() {
