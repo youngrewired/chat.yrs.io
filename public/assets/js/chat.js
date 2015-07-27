@@ -114,6 +114,10 @@ function showMessage(message, user){
   var href = "https://twitter.com/"+ user.image + "/";
   var html = "<li>";
 
+  // highlight the current users
+  var re = new RegExp("@?" + authData.twitter.username, "ig");
+  message.text = message.text.replace(re, "<text class='highlight-mention'>@" + authData.twitter.username + "</text>")
+
   if (user.name == "Server"){
     msgClass = "server-msg";
     hasImage = false;

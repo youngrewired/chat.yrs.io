@@ -300,6 +300,9 @@ form button {
   margin-right: 20px;
 }
 
+text.highlight-mention{
+  background-color: yellow;
+}
 
 /* MOBILE */
 
