@@ -104,6 +104,7 @@ function makeTweetButton(text){
 
 function showMessage(message, user){
   message.text = emojione.toImage(message.text);
+  message.text = linkifyStr(message.text`);
 
   var msgClass = "msg";
   var hasImage = Boolean(user.image);
@@ -111,7 +112,7 @@ function showMessage(message, user){
   var canTweet = true;
 
   var twitterUser = user.name;
-  var href = "https://twitter.com/"+ user.image + "/";
+  var href = "https://twitter.com/"+ user.name + "/";
   var html = "<li>";
 
   // highlight the current users
@@ -159,13 +160,10 @@ function showMessage(message, user){
   html += "</li>";
   var messageElement = $(html);
 
-
-  messageElement.linkify({
-    target: "_blank"
-  });
-
   if (!wasLastUser){
     $('#messages').append(messageElement).animate({scrollTop: 1000000}, "slow");
+  } else {
+    $('#messages').animate({scrollTop: 1000000}, "slow");
   }
 
   lastUser = user.name;
