@@ -384,6 +384,7 @@ io.on('connection', function(socket){
 		// commands section
 		var args = msg.split(" ");
 		if (adminTags.indexOf(userObj.tags) != -1){
+			args[0] = args[0].toLowerCase();
 			if(args[0] == '/ban') {
 				banUser(args[1], userObj.nameLower, fn);
 				return;
