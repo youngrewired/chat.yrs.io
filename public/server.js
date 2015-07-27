@@ -11,7 +11,7 @@ var mongojs = require('mongojs');
 banned = list.array;
 
 app.use(express.static(__dirname));
-var db = mongojs('mongodb://localhost:27017/yrs', ['admins', 'ranks', 'bans']);
+var db = mongojs('mongodb://localhost:27017/yrs', ['admins', 'ranks', 'bans', 'messages']);
 
 //var marked = require('marked');
 // marked.setOptions({
@@ -307,6 +307,15 @@ function deleteMessage(timestamp){
 	io.emit("delete message", timestamp)
 }
 
+function saveMessage(message, user){
+	db.messages.insert({
+		user: user["nameLower"],
+		message: message["text"],
+		ts: message["timestamp"]
+	})
+}
+
+
 io.on('connection', function(socket){
 	socket.on("user join", function(token, username, imageLink){
 		if (!token) return;
@@ -440,6 +449,7 @@ io.on('connection', function(socket){
 		}
 
 		io.emit('chat message', message, getSafeUser(token));
+		saveMessage(message, userObj);
 
 		fn({
 			status: "success"
