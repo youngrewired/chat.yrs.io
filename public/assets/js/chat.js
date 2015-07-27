@@ -94,7 +94,7 @@ function getUsers(socket){
 
 function makeTweetButton(text){
   text = text.replace(/<[^(img)][^>]*>|<img.+?alt="|"[^>]*>/g, "");
-  return '<ahref="https://twitter.com/share" ' +
+  return '<a href="https://twitter.com/share" ' +
     'class="twitter-share-button"' +
     'data-url="http://chat.yrs.io" ' +
     'data-text="' + text + ' // Join the conversation at" ' +
