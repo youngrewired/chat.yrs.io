@@ -287,5 +287,5 @@ $(window).unload(function() {
 });
 
 window.onbeforeunload = function(){
-    return "Closing the window will disconnect your from YRS Chat";
+    return "Closing the window will disconnect you from YRS Chat";
 };
