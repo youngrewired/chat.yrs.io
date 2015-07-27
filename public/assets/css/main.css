@@ -314,3 +314,88 @@ text.highlight-mention{
     display: none;
   }
 }
+
+/* Wide Display (1200px+) */
+@media screen and (min-width: 1200px) {
+  .wrap{
+    width: 80%;
+  }
+  #chat{
+    bottom: 280px;
+  }
+  #users{
+    width: 200px;
+    float: left;
+    height: 100%;
+    border-right: 1px solid #efefef;
+  }
+  #users h3 {
+    font-weight: 300;
+    width: 100%;
+    text-align: center;
+    border-bottom: 1px solid #efefef;
+  }
+  #users #userlist{
+    padding-top: 15px;
+  }
+  #users #userlist li{
+    display: block;
+    padding-left: 3px;
+  }
+  #messages{
+    width: calc(100% - 221px);
+    float: left;
+    list-style: none;
+    overflow-y: auto;
+    height: 100%;
+    padding: 0px 10px;
+  }
+}
+/* Smaller Display (<1200px) */
+@media screen and (max-width: 1199px) {
+  .wrap{
+    max-width: 960px;
+    width: 100%;
+  }
+  #users {
+    height: 50px;
+    border-bottom: 1px solid #efefef;
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+  }
+
+  #users h3 {
+    float: left;
+    font-weight: 300;
+    margin-left: 20px;
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+    margin-right: 10px;
+  }
+
+  #userlist {
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+    margin: 2px;
+  }
+
+  #userlist li {
+    display: inline;
+    list-style: none;
+    margin-right: 20px;
+  }
+
+  #messages {
+    list-style: none;
+    overflow-y: auto;
+    height: 100%;
+    padding: 0px 10px;
+  }
+
+  #chat{
+    bottom: 350px;
+  }
+}
