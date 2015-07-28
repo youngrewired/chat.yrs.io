@@ -18,12 +18,15 @@ var colourdata = fs.readFileSync("../configs/colours.json", "utf8", function(err
 	if (err) throw err;
 });
 var colours = JSON.parse(colourdata);
-
+console.log({consumer_key: config.twitter_consumer_key,
+	consumer_secret: config.twitter_consumer_secret,
+	access_token_key: config.twitter_access_key,
+	access_token_secret: config.twitter_access_secret});
 var twitter = new Twitter({
-	consumer_key: "t3sM7RN4dbUMMtvdndXM4Aagx",
-	consumer_secret: "12bVYwF5XMtflPOuqZqqHd37C3sLdweYdd0VEsmmHxDBe2N3ud",
-	access_token_key: "534730889-MFhJksiD0oWEhNXq2SyssIgpgO0rhH4n3wYrx1nH",
-	access_token_secret: "ST0E8CouLUSvF1TUKsieXMFjKR7SnNcFBb2HjcjvcY9uy"
+	consumer_key: config.twitter_consumer_key,
+	consumer_secret: config.twitter_consumer_secret,
+	access_token_key: config.twitter_access_key,
+	access_token_secret: config.twitter_access_secret
 });
 
 banned = list.array;

@@ -1,5 +1,9 @@
 {
 	"firebase_url": "https://yrschat.firebaseio.com/",
 	"port": 80,
-	"timeout": 15
+	"timeout": 15,
+    "twitter_consumer_key": "Insert",
+    "twitter_consumer_secret": "Twitter",
+    "twitter_access_key": "Auth",
+    "twitter_access_secret": "keys"
 }
