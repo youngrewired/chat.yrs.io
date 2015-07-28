@@ -361,7 +361,6 @@ io.on('connection', function(socket){
             // create userObj
             var userObj = newUser(token, username, imageLink);
 
-            console.log("Test",userObj);
 
             // set ban flag
             db.bans.find({
@@ -389,7 +388,6 @@ io.on('connection', function(socket){
             io.emit("user join", getUser(token));
           });
         } else {
-          console.log(getUser(token));
           getUser(token).online = true;
           //notify others that someone has joined
           getUser(token).lastPing = time();
