@@ -9,6 +9,7 @@
     "firebase": "2.2.7",
     "marked": "^0.3.3",
     "mongojs": "^1.2.0",
+    "mtwitter": "^1.6.4",
     "socket.io": "1.2.0"
   }
 }

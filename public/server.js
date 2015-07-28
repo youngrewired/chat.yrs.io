@@ -7,6 +7,24 @@ var fs = require('fs');
 var list = require('badwords-list');
 var Firebase = require("firebase");
 var mongojs = require('mongojs');
+var Twitter = require('mtwitter');
+
+var configdata = fs.readFileSync("../configs/config.json", "utf8", function(err, data) {
+	if (err) throw err;
+});
+var config = JSON.parse(configdata);
+
+var colourdata = fs.readFileSync("../configs/colours.json", "utf8", function(err, data) {
+	if (err) throw err;
+});
+var colours = JSON.parse(colourdata);
+
+var twitter = new Twitter({
+	consumer_key: "t3sM7RN4dbUMMtvdndXM4Aagx",
+	consumer_secret: "12bVYwF5XMtflPOuqZqqHd37C3sLdweYdd0VEsmmHxDBe2N3ud",
+	access_token_key: "534730889-MFhJksiD0oWEhNXq2SyssIgpgO0rhH4n3wYrx1nH",
+	access_token_secret: "ST0E8CouLUSvF1TUKsieXMFjKR7SnNcFBb2HjcjvcY9uy"
+});
 
 banned = list.array;
 
@@ -24,16 +42,6 @@ var db = mongojs('mongodb://localhost:27017/yrs', ['admins', 'ranks', 'bans', 'm
 //   smartLists: false,
 //   smartypants: false
 // });
-
-var configdata = fs.readFileSync("../configs/config.json", "utf8", function(err, data) {
-	if (err) throw err;
-});
-var config = JSON.parse(configdata);
-
-var colourdata = fs.readFileSync("../configs/colours.json", "utf8", function(err, data) {
-	if (err) throw err;
-});
-var colours = JSON.parse(colourdata);
 
 var ref = new Firebase(config.firebase_url);
 
@@ -319,22 +327,12 @@ function saveMessage(message, user){
 
 
 io.on('connection', function(socket){
-	socket.on("user join", function(token, cachedUserProfile){
+	socket.on("user join", function(token){
 		if (!token) return;
-
-		var username = cachedUserProfile.screen_name;
-		var imageLink = cachedUserProfile.profile_image_url;
-		var joined = new Date(cachedUserProfile.created_at);
-
-		if (!username) return;
-		if (!imageLink) return;
-
-		username = escapeHTML(username);
-		imageLink = escapeHTML(imageLink);
 
 		if (token == config.rubytoken){
 			if (!getUser(token)){
-				var userObj = newUser(token, username, imageLink);
+				var userObj = newUser(token, "RubyBot", "https://pbs.twimg.com/profile_images/625286756573782016/lcKdKSnQ.png");
 			}
 			io.emit("user join", getUser(token));
 			return;
@@ -345,38 +343,58 @@ io.on('connection', function(socket){
 				console.log(error)
 			} else {
 				if (!getUser(token)) {
-					// create userObj
-					var userObj = newUser(token, username, imageLink);
-
-					// set ban flag
-					db.bans.find({
-						'user': userObj.nameLower
-					}, function(err, docs) {
-						if (docs[0]) userObj.banned = true;
-					});
-
-					// set tag
-					db.ranks.find({
-						'people': userObj.nameLower
-					}, function(err, docs) {
-						if(docs[0]) {
-							userObj.tags = docs[0].rank;
-						} else {
-							userObj.tags = 'Community';
+					// get user details from twitter
+					twitter.get("/users/show",{
+						user_id: parseInt(data.uid.split(":")[1])
+					},
+					function(error, data, reponse) {
+						if (error) {
+							console.log(error);
+							return;
 						}
-					});
-					//getUser(token) = userObj;
 
-				} else {
-					getUser(token).online = true;
-				}
+            console.log(data);
 
-				if(Date.now()-3600000 < joined){
-					banUser(getUser(token).name, "Server (recent create ban)", function(){})
-				}
-				//notify others that someone has joined
-				getUser(token).lastPing = time();
-				io.emit("user join", getUser(token));
+            var username = data.screen_name;
+            var imageLink = data.profile_image_url;
+            var joined = new Date(data.created_at);
+            // create userObj
+            var userObj = newUser(token, username, imageLink);
+
+            console.log("Test",userObj);
+
+            // set ban flag
+            db.bans.find({
+              'user': userObj.nameLower
+            }, function (err, docs) {
+              if (docs[0]) userObj.banned = true;
+            });
+
+            // set tag
+            db.ranks.find({
+              'people': userObj.nameLower
+            }, function (err, docs) {
+              if (docs[0]) {
+                userObj.tags = docs[0].rank;
+              } else {
+                userObj.tags = 'Community';
+              }
+            });
+            //getUser(token) = userObj;
+            if(Date.now()-3600000 < joined){
+              banUser(getUser(token).name, "Server (recent create ban)", function(){})
+            }
+            //notify others that someone has joined
+            getUser(token).lastPing = time();
+            io.emit("user join", getUser(token));
+          });
+        } else {
+          console.log(getUser(token));
+          getUser(token).online = true;
+          //notify others that someone has joined
+          getUser(token).lastPing = time();
+          io.emit("user join", getUser(token));
+        }
 			}
 		});
 	});
