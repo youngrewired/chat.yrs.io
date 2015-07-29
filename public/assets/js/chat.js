@@ -104,8 +104,8 @@ function makeTweetButton(text){
 }
 
 function showMessage(message, user){
-  message.text = emojione.toImage(message.text);
   message.text = linkifyStr(message.text);
+  message.text = emojione.toImage(message.text);
 
   var msgClass = "msg";
   var hasImage = Boolean(user.image);
