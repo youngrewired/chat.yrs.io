@@ -5,5 +5,9 @@
     "twitter_consumer_key": "Insert",
     "twitter_consumer_secret": "Twitter",
     "twitter_access_key": "Auth",
-    "twitter_access_secret": "keys"
+    "twitter_access_secret": "keys",
+    "github": {
+        "url": "/webhook/github",
+        "secret": "CHANGEME"
+    }
 }

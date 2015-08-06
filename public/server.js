@@ -8,6 +8,9 @@ var list = require('badwords-list');
 var Firebase = require("firebase");
 var mongojs = require('mongojs');
 var Twitter = require('mtwitter');
+var exec = require('child_process').execFile;
+
+var createHandler = require("github-webhook-handler");
 
 var configdata = fs.readFileSync("../configs/config.json", "utf8", function(err, data) {
 	if (err) throw err;
@@ -18,10 +21,7 @@ var colourdata = fs.readFileSync("../configs/colours.json", "utf8", function(err
 	if (err) throw err;
 });
 var colours = JSON.parse(colourdata);
-console.log({consumer_key: config.twitter_consumer_key,
-	consumer_secret: config.twitter_consumer_secret,
-	access_token_key: config.twitter_access_key,
-	access_token_secret: config.twitter_access_secret});
+
 var twitter = new Twitter({
 	consumer_key: config.twitter_consumer_key,
 	consumer_secret: config.twitter_consumer_secret,
@@ -34,17 +34,10 @@ banned = list.array;
 app.use(express.static(__dirname));
 var db = mongojs('mongodb://localhost:27017/yrs', ['admins', 'ranks', 'bans', 'messages']);
 
-//var marked = require('marked');
-// marked.setOptions({
-//   renderer: new marked.Renderer(),
-//   gfm: true,
-//   tables: false,
-//   breaks: false,
-//   pedantic: false,
-//   sanitize: false,
-//   smartLists: false,
-//   smartypants: false
-// });
+var handler = createHandler({
+  path: config.github.url,
+  secret: config.github.secret
+});
 
 var ref = new Firebase(config.firebase_url);
 
@@ -137,7 +130,15 @@ function escapeHTML(string) {
 	return string.replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
 
+app.post("/webhook/github", function(req, res){
+  handler(req, res, function (err) {
+    res.statusCode = 404;
+    res.end('no such location')
+  });
+});
 
+
+// this isn't actually required AFAIK.
 app.get('/', function(req, res) {
 	res.sendFile("./index.html");
 });
@@ -356,8 +357,6 @@ io.on('connection', function(socket){
 							return;
 						}
 
-            console.log(data);
-
             var username = data.screen_name;
             var imageLink = data.profile_image_url;
             var joined = new Date(data.created_at);
@@ -527,6 +526,16 @@ function checkPings() {
 }
 
 http.listen(config.port, function(){
-    console.log('listening on Port ' + config.port);
-	  setInterval(checkPings, 5000)
+  console.log('listening on Port ' + config.port);
+	setInterval(checkPings, 5000);
+});
+
+handler.on("push", function(event){
+	console.log(
+		'Received a push event for %s to %s',
+		event.payload.repository.name,
+		event.payload.ref
+	);
+	exec("/usr/bin/git pull");
+  exec("npm install");
 });
